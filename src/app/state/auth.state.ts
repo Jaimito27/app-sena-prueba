@@ -1,5 +1,5 @@
 import { Action, Selector, State, StateContext } from "@ngxs/store";
-import { AuthStateModel } from "../shared/models/auth-state.interface";
+import { AuthStateModel } from '../shared/models/auth-state.interface';
 import { Injectable } from "@angular/core";
 import { User } from "../shared/models/user.interface";
 
@@ -33,12 +33,12 @@ export class ClearAuthError {
 
 export class Register {
   static readonly type = '[Auth] Register'
-  constructor(public userDetails: any) { }
+  constructor(public payload?: { isLoading?: boolean, error?: string | null }) { }
 }
 
 export class ForgotPassword {
   static readonly type = '[Auth] Forgot Password';
-  constructor(public email: string) { }
+  constructor(public payload?: { email?: string; isLoading?: boolean, error?: string | null }) { }
 }
 
 
@@ -81,14 +81,31 @@ export class AuthState {
   //la logivca de autenticacion estará en el service, aca solo se manejan los estados
 
   @Action(Login)
-  async login(ctx: StateContext<AuthStateModel>, action: Login){
-    ctx.patchState({isLoading: true, error: null});
+  async login(ctx: StateContext<AuthStateModel>, action: Login) {
+    ctx.patchState({ isLoading: true, error: null });
 
     //irian metodos de auth service pero ante la simulación se envia un exito o fallo
   }
 
+  @Action(Register)
+  register(ctx: StateContext<AuthStateModel>, action: Register) {
+    ctx.patchState({
+      isLoading: action.payload?.isLoading ?? false,
+      error: action.payload?.error ?? null
+    });
+    // Si no hay payload, esto solo limpia el estado de error/carga
+  }
+
+  @Action(ForgotPassword)
+  forgotPassword(ctx: StateContext<AuthStateModel>, action: ForgotPassword) {
+    ctx.patchState({
+      isLoading: action.payload?.isLoading ?? false,
+      error: action.payload?.error ?? null
+    })
+  }
+
   @Action(SetUser)
-  setUser(ctx: StateContext<AuthStateModel>, action: SetUser){
+  setUser(ctx: StateContext<AuthStateModel>, action: SetUser) {
     ctx.patchState({
       token: action.token,
       user: action.user,
@@ -99,15 +116,15 @@ export class AuthState {
   }
 
   @Action(Logout)
-  logout(ctx: StateContext<AuthStateModel>){
+  logout(ctx: StateContext<AuthStateModel>) {
     ctx.setState(initialState); //resetea el estado a su valor inicial
-//limipiar el almacenamiento persistente
+    //limipiar el almacenamiento persistente
     localStorage.removeItem('auth.token');
     localStorage.removeItem('auth.user')
   }
 
   @Action(ClearAuthError)
-  clearAuthError(ctx: StateContext<AuthStateModel>){
-    ctx.patchState({error: null});
+  clearAuthError(ctx: StateContext<AuthStateModel>) {
+    ctx.patchState({ error: null });
   }
 }

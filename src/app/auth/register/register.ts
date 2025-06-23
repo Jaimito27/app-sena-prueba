@@ -5,7 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { ClearAuthError, Register } from '../../state/auth.state';
+import { ClearAuthError, Register as RegisterAction } from '../../state/auth.state';
 
 @Component({
   selector: 'app-register',
@@ -14,7 +14,7 @@ import { ClearAuthError, Register } from '../../state/auth.state';
   templateUrl: './register.html',
   styleUrl: './register.scss'
 })
-export class RegisterComponent {
+export class Register {
   registerForm!: FormGroup;
   private fb = inject(FormBuilder);
   private authService = inject(AuthService)
@@ -41,7 +41,7 @@ export class RegisterComponent {
 
   onSubmit(): void {
     if (this.registerForm.valid) {
-      this.store.dispatch(new Register({ isLoading: true, error: null }));
+      this.store.dispatch(new RegisterAction({ isLoading: true, error: null }));
       const { username, email, password } = this.registerForm.value;
 
       const userDetails = {
@@ -61,7 +61,7 @@ export class RegisterComponent {
           this.router.navigate(['/auth/login'])
         }, error: (err) => {
           this.successMessage = null;
-          this.store.dispatch(new Register({ error: err.message || 'Error desconocido al registar', isLoading: false })) //actualiza el estado con el error
+          this.store.dispatch(new RegisterAction({ error: err.message || 'Error desconocido al registar', isLoading: false })) //actualiza el estado con el error
           console.error('Error en el registro del componente:', err);
         }
       });

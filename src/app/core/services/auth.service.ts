@@ -52,12 +52,17 @@ export class AuthService {
   forgotPassword(email: string): Observable<any> {
     //se simula una respuesta
     console.log(`Simulando una recuperación de contraseña ${email}`);
-    this.store.dispatch(new ForgotPassword(email)); //dipara la acción de recuperacion
+    this.store.dispatch(new ForgotPassword({ email: email, isLoading: true, error: null })); //dipara la acción de recuperacion
     return of({ success: true, message: `Instrucciones enviadas al ${email}` }).pipe(
-      tap(() => console.log('Simulación exitosa')),
+      tap(() => {
+        console.log('Simulación exitosa');
+        this.store.dispatch(new ForgotPassword({ isLoading: false, error: null }))
+      }),
       catchError(error => {
         console.error('Simulación fallida: ', error);
-        return throwError(() => new Error('Error en la recuperación de contraseña'));
+        const errorMessage = error.message || 'Error en la recuperación de contraseña';
+        this.store.dispatch(new ForgotPassword({ isLoading: false, error: errorMessage }));
+        return throwError(() => new Error(errorMessage))
       })
     );
   }
