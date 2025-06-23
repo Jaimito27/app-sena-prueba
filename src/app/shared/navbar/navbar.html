@@ -1,0 +1,41 @@
+<nav class="navbar is-light" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a class="navbar-item" routerLink="/dashboard">
+      <p class="title is-5 has-text-primary">App Multitenant</p>
+    </a>
+  </div>
+
+  <div id="navbarBasicExample" class="navbar-menu">
+    <div class="navbar-start">
+      <a class="navbar-item" routerLink="/dashboard" routerLinkActive="is-active">
+        Dashboard
+      </a>
+      <a class="navbar-item" routerLink="/documents" routerLinkActive="is-active">
+        Documentos
+      </a>
+      <a class="navbar-item" routerLink="/users" routerLinkActive="is-active" *ngIf="isAdmin$ | async">
+        Gestión de Usuarios
+      </a>
+    </div>
+
+    <div class="navbar-end">
+      <div class="navbar-item">
+        <div class="buttons">
+          <ng-container *ngIf="(isAuthenticated$ | async); else authButtons">
+            <button class="button is-light" (click)="onLogout()">
+              Cerrar Sesión
+            </button>
+          </ng-container>
+          <ng-template #authButtons>
+            <a class="button is-primary" routerLink="/auth/register">
+              <strong>Registrarse</strong>
+            </a>
+            <a class="button is-light" routerLink="/auth/login">
+              Iniciar Sesión
+            </a>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
