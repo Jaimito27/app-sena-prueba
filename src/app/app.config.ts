@@ -9,13 +9,14 @@ import { withNgxsStoragePlugin } from '@ngxs/storage-plugin';
 import { AuthState } from './state/auth.state';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { UserState } from './state/user.state';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideStore([AuthState],
+    provideStore([AuthState, UserState],
       withNgxsReduxDevtoolsPlugin({
         disabled: !isDevMode()
       }),
