@@ -1,6 +1,6 @@
 import { Routes } from "@angular/router";
-import { Users } from "./users";
+import { Users } from "./users-management";
 
 export const USERS_ROUTES: Routes = [
-  {path: 'users', component: Users}
+  {path: '', component: Users}
 ]
