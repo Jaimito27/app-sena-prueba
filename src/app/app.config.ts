@@ -7,6 +7,8 @@ import { withNgxsReduxDevtoolsPlugin } from '@ngxs/devtools-plugin';
 import { withNgxsLoggerPlugin } from '@ngxs/logger-plugin';
 import { withNgxsStoragePlugin } from '@ngxs/storage-plugin';
 import { AuthState } from './state/auth.state';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -22,7 +24,8 @@ export const appConfig: ApplicationConfig = {
       }),
       withNgxsStoragePlugin({
         keys: ['auth.token', 'auth.user'],
-      })
-    )
+      }),
+    ),
+    provideHttpClient(withInterceptors([AuthInterceptor])),
   ]
 };
