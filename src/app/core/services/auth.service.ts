@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { Login as LoginAction, SetUser, ForgotPassword, Logout } from '../../state/auth.state';
+import { Login as LoginAction, SetUser, ForgotPassword as ForgotPasswordAction, Logout } from '../../state/auth.state';
 import { User } from '../../shared/models/user.interface';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { Observable, of, throwError } from 'rxjs';
 
 @Injectable({
@@ -48,24 +48,48 @@ export class AuthService {
 
   }
 
-  //Recuperación de contraseña
   forgotPassword(email: string): Observable<any> {
-    //se simula una respuesta
-    console.log(`Simulando una recuperación de contraseña ${email}`);
-    this.store.dispatch(new ForgotPassword({ email: email, isLoading: true, error: null })); //dipara la acción de recuperacion
-    return of({ success: true, message: `Instrucciones enviadas al ${email}` }).pipe(
-      tap(() => {
-        console.log('Simulación exitosa');
-        this.store.dispatch(new ForgotPassword({ isLoading: false, error: null }))
+    //dispara la acción para indicar que la operación comienza y establecer isLoading como true
+    this.store.dispatch(new ForgotPasswordAction({ email: email, isLoading: true, error: null }));
+    console.log(`Verificando email para recuperación de contraseña: ${email}`);
+    //invocar los usuarios de la API
+
+    return this.http.get<{ users: User[] }>(this.API_URL).pipe(
+      //para cambiar del observable de la petición HTTP a un nuevo observable que simula el éxito o lanza un error.
+      switchMap(res => {
+        //busca el email proporcionado en el array de usuarios
+        const foundUser = res.users.find(user => user.email === email)
+
+
+        if (foundUser) {
+          //si encuenta el email, simula el exito despues de una pequeña demora
+          return of({ success: true, message: `Instrucciones de recuperación enviadas al correo ${email}` }).pipe(
+            tap(() => {
+              console.log('Recuperación simulada exitosa');
+              //se dispara la acción para indicar que la operacion finalizó
+              this.store.dispatch(new ForgotPasswordAction({ isLoading: false, error: null }));
+            })
+          );
+        } else {
+          //si no se encuenta el email lanza un eror
+          const errorMesagge = 'No se encuentra el email proporcionado'
+          this.store.dispatch(new ForgotPasswordAction({ isLoading: false, error: errorMesagge }))
+          return throwError(() => new Error(errorMesagge)); // Lanza el error para que sea capturado por el catchError principal
+        }
       }),
+      //manejo generak de errores de la llamada HTTP o del swithmap
       catchError(error => {
-        console.error('Simulación fallida: ', error);
-        const errorMessage = error.message || 'Error en la recuperación de contraseña';
-        this.store.dispatch(new ForgotPassword({ isLoading: false, error: errorMessage }));
-        return throwError(() => new Error(errorMessage))
+        console.error('Recuperación de contraseña fallida', error);
+        const errorMessage = error.message || 'Error en recuperación de constraseña';
+        //el estado error desaparezca si hay fallo inesperado
+        this.store.dispatch(new ForgotPasswordAction({ isLoading: false, error: errorMessage }));
+        return throwError(() => new Error(errorMessage));
       })
     );
   }
+
+
+
 
   //registro (simulado)
   register(userDetails: any): Observable<any> {

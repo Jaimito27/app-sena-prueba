@@ -19,7 +19,7 @@ export class ForgotPassword {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private store = inject(Store);
-  private route = inject(Router);
+  private router = inject(Router);
 
   isLoading$: Observable<boolean> = this.store.select(state => state.auth.isLoading);
   errorMessage$: Observable<string | null> = this.store.select(state => state.auth.error);
@@ -46,6 +46,7 @@ export class ForgotPassword {
         next: (res) => {
           this.successMessage = res.message || 'Instrucciones de recuperación enviadas a tu correo.';
           alert(`Recuperación de contraseña simulada ${res.message}`)
+          this.router.navigate(['/auth/login'])
         }, error: (err) => {
           this.successMessage = null;
           this.store.dispatch(new ForgotPasswordAction({ error: err.message || 'Error desconocido al enviar instrucciones', isLoading: false })); //Actualiza el estado con el error
