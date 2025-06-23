@@ -1,0 +1,56 @@
+import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
+import { Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { AuthState } from '../../state/auth.state';
+
+@Component({
+  selector: 'app-login',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  templateUrl: './login.html',
+  styleUrl: './login.scss'
+})
+export class Login {
+  loginForm!: FormGroup;
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private store = inject(Store);
+  private router = inject(Router);
+
+  isLoading$: Observable<boolean> = this.store.select(state => state.auth.isLoading);
+  errorMessage$: Observable<string | null> = this.store.select(state => state.auth.error);
+
+  constructor() {
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]],
+    });
+
+    // Suscribirse al estado de autenticación para redirigir tras un login exitoso
+    this.store.select(AuthState.isAuthenticated).pipe().subscribe(isAuthenticated => {
+      if(isAuthenticated){
+        this.router.navigate(['/dashboard']);
+      }
+    })
+  }
+
+  onSubmit():void {
+    if(this.loginForm.valid){
+      const {email, password} = this.loginForm.value;
+      this.authService.login(email,password).subscribe({
+        next: (response )=> {
+          //el dispatch de setUser ya se hace en el auth service
+          alert(`${response} Login exitoso (simulado)`, );
+        }, error:(err)=> {
+          console.error('Error en el login componente: ',err)
+        }
+      })
+    }else{
+      this.loginForm.markAllAsTouched();
+    }
+  }
+}
