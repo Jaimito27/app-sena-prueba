@@ -17,33 +17,35 @@ export class AuthService {
 
   //autenticación simulada
 
-  login(email: string, password: string) {
-    this.store.dispatch(new LoginAction(email, password)); //diapara la acción de inicio de sesión
+  login(email: string, password: string): Observable<any> {
+    this.store.dispatch(new LoginAction(email, password));
+    // Opción 2: Obtener todos los usuarios y filtrar en el cliente por el campo 'email'
 
-    //para simular, se usa el email como username
-
-    return this.http.get<{ users: User[] }>(`<span class="math-inline">\{this\.API\_URL\}/filter?key\=username&value\=</span>{email}`).pipe(
-      map(response => response.users[0]), //obtiene el primer usuario que coincida
-      tap(user => {
+    return this.http.get<{ users: User[] }>(this.API_URL).pipe(//trae todos los usuarios
+      map(res => {
+        //buscar e, usuario por email en el array que devuelve la API
+        const user = res.users.find(u => u.email === email);
         if (user) {
           const simulatedUser: User = {
             ...user,
-            roles: user.id === 1 ? ['admin', 'user'] : ['user'], //usuario con id 1, es el admin
-            tenantId: user.id % 2 === 0 ? 1 : 2, //alternad tenantdId para simular
+            roles: user.id === 1 ? ['admin', 'user'] : ['user'], //user con id es admin
+            tenantId: user.id % 2 === 0 ? 1 : 2, //alternar tendadid para simular
           };
-          const simulatedToken = `fake-jwt-token-<span class="math-inline">\{user\.id\}\-</span>{Date.now()}`;
 
-          this.store.dispatch(new SetUser(simulatedUser, simulatedToken))
-          return { token: simulatedToken, user: simulatedUser }
+          const simulatedToken = `fake-jwt-token-${user.id}-${Date.now()}`;
+
+          this.store.dispatch(new SetUser(simulatedUser, simulatedToken));
+          return { token: simulatedToken, user: simulatedUser };
         } else {
-          throw new Error('Credenciales inválidas')
+          throw new Error('Credenciales inválidas: Usuario no encontrado.')
         }
       }),
       catchError(error => {
-        console.error('Login failed: ', error);
-        return throwError(() => new Error('Error al iniciar sesión: ' + error.message));
+        console.error('Error durante la llamada', error);
+        return throwError(() => new Error('Error el inciar sesión: ' + (error.message || 'Error')));
       })
-    );
+    )
+
   }
 
   //Recuperación de contraseña
