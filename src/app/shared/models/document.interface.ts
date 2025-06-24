@@ -5,6 +5,6 @@ export interface Document {
   size: number;
   uploadDate: string;
   userId: number;
-  tenantId: number;
+  tenantId: string;
   tags: string[]
 }
