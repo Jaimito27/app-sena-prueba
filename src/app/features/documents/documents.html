@@ -1,1 +1,147 @@
-<p>documents works!</p>
+<div class="container">
+  <h1 class="title">Gestión de Documentos</h1>
+
+  <div class="field">
+    <label class="label">Buscar documentos:</label>
+    <div class="control">
+      <input class="input" type="text" placeholder="Buscar por nombre, tipo o tag..." [(ngModel)]="searchQuery"
+        (input)="applySearchFilter()">
+    </div>
+  </div>
+
+  <div class="buttons">
+    <button class="button is-success" (click)="openAddDocumentModal()">Añadir Nuevo Documento</button>
+  </div>
+
+  <div *ngIf="isLoading$ | async" class="notification is-info">
+    Cargando documentos...
+  </div>
+
+  <div *ngIf="documentsError$ | async as error" class="notification is-danger">
+    <strong>Error:</strong> {{ error }}
+  </div>
+
+  <table class="table is-fullwidth is-striped is-hoverable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Tipo</th>
+        <th>Tamaño (bytes)</th>
+        <th>Fecha Subida</th>
+        <th>Tenant ID</th>
+        <th>Tags</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let document of filteredAndSearchedDocuments">
+        <td>{{ document.id }}</td>
+        <td>{{ document.name }}</td>
+        <td>{{ document.type }}</td>
+        <td>{{ document.size }}</td>
+        <td>{{ document.uploadDate }}</td>
+        <td>{{ document.tenantId }}</td>
+        <td>
+          <span class="tag is-light mr-1" *ngFor="let tag of document.tags">{{ tag }}</span>
+        </td>
+        <td>
+          <button class="button is-small is-info mr-2" (click)="viewDetails(document)">Ver Detalles</button>
+          <button class="button is-small is-warning mr-2" (click)="onEditDocument(document)">Editar</button>
+          <button class="button is-small is-danger" (click)="onDeleteDocument(document.id)">Eliminar</button>
+        </td>
+      </tr>
+      <tr *ngIf="filteredAndSearchedDocuments.length === 0 && !(isLoading$ | async)">
+        <td colspan="8" class="has-text-centered">No hay documentos para mostrar con los filtros actuales.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="modal" [ngClass]="{'is-active': (selectedDocument$ | async)}">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Detalles del Documento</p>
+        <button class="delete" aria-label="close" (click)="closeDetailsModal()"></button>
+      </header>
+      <section class="modal-card-body">
+        <div *ngIf="selectedDocument$ | async as doc">
+          <p><strong>ID:</strong> {{ doc.id }}</p>
+          <p><strong>Nombre:</strong> {{ doc.name }}</p>
+          <p><strong>Tipo:</strong> {{ doc.type }}</p>
+          <p><strong>Tamaño:</strong> {{ doc.size }} bytes</p>
+          <p><strong>Fecha Subida:</strong> {{ doc.uploadDate }}</p>
+          <p><strong>Subido por User ID:</strong> {{ doc.userId }}</p>
+          <p><strong>Tenant ID:</strong> {{ doc.tenantId }}</p>
+          <p><strong>Tags:</strong> <span class="tag is-light mr-1" *ngFor="let tag of doc.tags">{{ tag }}</span></p>
+        </div>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button" (click)="closeDetailsModal()">Cerrar</button>
+      </footer>
+    </div>
+  </div>
+
+  <div class="modal" [ngClass]="{'is-active': isDocumentFormModalActive}">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">{{ isEditMode ? 'Editar Documento' : 'Añadir Nuevo Documento' }}</p>
+        <button class="delete" aria-label="close" (click)="closeDocumentFormModal()"></button>
+      </header>
+      <section class="modal-card-body">
+        <form (ngSubmit)="saveDocument()">
+          <div class="field">
+            <label class="label" for="docName">Nombre</label>
+            <div class="control">
+              <input class="input" type="text" id="docName" name="docName" [(ngModel)]="currentDocumentForm.name"
+                required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" for="docType">Tipo</label>
+            <div class="control">
+              <input class="input" type="text" id="docType" name="docType" [(ngModel)]="currentDocumentForm.type"
+                required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" for="docSize">Tamaño (bytes)</label>
+            <div class="control">
+              <input class="input" type="number" id="docSize" name="docSize" [(ngModel)]="currentDocumentForm.size"
+                required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" for="docUploadDate">Fecha Subida</label>
+            <div class="control">
+              <input class="input" type="date" id="docUploadDate" name="docUploadDate"
+                [(ngModel)]="currentDocumentForm.uploadDate" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" for="docTags">Tags (separados por coma)</label>
+            <div class="control">
+              <input class="input" type="text" id="docTags" name="docTags"
+                [ngModel]="currentDocumentForm.tags.join(', ')" (ngModelChange)="updateTags($event)"
+                placeholder="ej: contrato, legal, finanzas">
+            </div>
+          </div>
+
+          <p class="help">Tenant ID: {{ currentDocumentForm.tenantId }}</p>
+          <p class="help">User ID: {{ currentDocumentForm.userId }}</p>
+
+        </form>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button is-success" (click)="saveDocument()">{{ isEditMode ? 'Guardar Cambios' : 'Añadir
+          Documento' }}</button>
+        <button class="button" (click)="closeDocumentFormModal()">Cancelar</button>
+      </footer>
+    </div>
+  </div>
+</div>

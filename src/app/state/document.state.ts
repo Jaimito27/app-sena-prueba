@@ -92,6 +92,11 @@ export class DocumentsState {
     return state.documents.filter(doc => doc.tenantId === state.filterTenantId)
   }
 
+   @Selector()
+  static filterTenantId(state: DocumentsStateModel): string | null {
+    return state.filterTenantId;
+  }
+
   //manejadores de acciones
 
   @Action(LoadDocuments)
