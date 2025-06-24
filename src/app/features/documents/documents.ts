@@ -174,10 +174,10 @@ export class Documents implements OnInit, OnDestroy {
     // podrías forzar una reevaluación, pero con debounceTime(300) y el stream de searchQuery
     // en combineLatest, debería ser suficiente.
   }
-// En src/app/features/documents/document-list/document-list.component.ts
-// (o documents.ts si no lo renombraste)
-updateTags(value: string): void { // Cambia de 'event: Event' a 'value: string'
+  // En src/app/features/documents/document-list/document-list.component.ts
+  // (o documents.ts si no lo renombraste)
+  updateTags(value: string): void { // Cambia de 'event: Event' a 'value: string'
     this.currentDocumentForm.tags = value.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
-}
+  }
 
 }

@@ -8,6 +8,7 @@ import { User } from "../shared/models/user.interface";
 const initialState: AuthStateModel = {
   token: null,
   user: null,
+  expiresAt: null,
   isAuthenticated: false,
   isLoading: false,
   error: null,
@@ -24,7 +25,7 @@ export class Logout {
 
 export class SetUser {
   static readonly type = '[Auth] Set User';
-  constructor(public user: User, public token: string) { }
+  constructor(public user: User, public token: string, public expiresAt: number) { }
 }
 
 export class ClearAuthError {
@@ -59,7 +60,9 @@ export class AuthState {
 
   @Selector()
   static isAuthenticated(state: AuthStateModel): boolean {
-    return state.isAuthenticated;
+    if(!state.token || !state.user) return false;
+    if(!state.expiresAt) return false;
+    return state.expiresAt > Date.now()
   }
 
   @Selector()
@@ -109,6 +112,7 @@ export class AuthState {
     ctx.patchState({
       token: action.token,
       user: action.user,
+      expiresAt: action.expiresAt,
       isAuthenticated: true,
       isLoading: false,
       error: null

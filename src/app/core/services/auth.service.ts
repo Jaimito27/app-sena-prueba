@@ -34,7 +34,10 @@ export class AuthService {
 
           const simulatedToken = `fake-jwt-token-${user.id}-${Date.now()}`;
 
-          this.store.dispatch(new SetUser(simulatedUser, simulatedToken));
+          //el token exoira en 30 minutos
+          const expiresAt=Date.now() +30 *60*1000; //30 miunutos
+          //despacha con expiresAt
+          this.store.dispatch(new SetUser(simulatedUser, simulatedToken, expiresAt));
           return { token: simulatedToken, user: simulatedUser };
         } else {
           throw new Error('Credenciales inválidas: Usuario no encontrado.')
@@ -103,7 +106,11 @@ export class AuthService {
           tenantId: (Math.floor(Math.random() * 2) + 1).toString(), //asignar un tenant id aleatorio
         };
         const simulatedToken = `fake-jwt-token-new-<span class="math-inline">\{newUser\.id\}\-</span>{Date.now()}`;
-        this.store.dispatch(new SetUser(simulatedUser, simulatedToken));
+//el token exoira en 30 minutos
+          const expiresAt=Date.now() +30 *60*1000; //30 miunutos
+
+
+        this.store.dispatch(new SetUser(simulatedUser, simulatedToken, expiresAt));
       }),
       catchError(error => {
         console.error('Simulación de registro fallida: ', error);

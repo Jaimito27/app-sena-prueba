@@ -25,7 +25,7 @@ export const appConfig: ApplicationConfig = {
         disabled: !isDevMode()
       }),
       withNgxsStoragePlugin({
-        keys: ['auth.token', 'auth.user'],
+        keys: ['auth'],
       }),
     ),
     provideHttpClient(withInterceptors([AuthInterceptor])),
