@@ -22,7 +22,7 @@ export class FetchUsersSuccess {
   constructor(public users: User[]) { }
 }
 
-export class FetchUsersFailture {
+export class FetchUsersFailure {
   static readonly type = '[Users] Fetch Users Failure';
   constructor(public error: string) { }
 }
@@ -87,15 +87,18 @@ export class UserState {
 
   @Action(FetchUsersSuccess)
   fetchUsersSuccess(ctx: StateContext<UserStateModel>, action: FetchUsersSuccess) {
+    console.log('5. UserState: Handling FetchUsersSuccess. Received users:', action.users); // <<-- LOG CRÍTICO 5
     ctx.patchState({
       users: action.users,
       isLoading: false,
       error: null,
     });
+    console.log('6. UserState: State patched. Current users in state:', ctx.getState().users); // <<-- LOG CRÍTICO 6
   }
 
-  @Action(FetchUsersFailture)
-  fetchUsersFailture(ctx: StateContext<UserStateModel>, action: FetchUsersFailture) {
+  @Action(FetchUsersFailure)
+  fetchUsersFailture(ctx: StateContext<UserStateModel>, action: FetchUsersFailure) {
+    console.error('7. UserState: Handling FetchUsersFailure. Error:', action.error); // <<-- LOG CRÍTICO 7
     ctx.patchState({
       isLoading: false,
       error: action.error,

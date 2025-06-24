@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Store, UpdateState } from '@ngxs/store';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { User } from '../../shared/models/user.interface';
-import { FetchUsers, FetchUsersSuccess, FetchUsersFailture, AddUser, DeleteUser } from '../../state/user.state';
+import { FetchUsers, FetchUsersSuccess, FetchUsersFailure, AddUser, DeleteUser } from '../../state/user.state';
 
 @Injectable({
   providedIn: 'root'
@@ -24,13 +24,13 @@ export class UserService {
         const usersWithSimulatedData: User[] = res.users.map(user => ({
           ...user,
           roles: user.id === 1 ? ['admin', 'user'] : ['user'],
-          tenantId: user.id % 2 === 0 ? 1 : 2,
+          tenantId: (user.id % 2 === 0) ? 'tenant2' : 'tenant1', // Si ID es par, Tenant 2. Si es impar, Tenant 1.
         }));
         this.store.dispatch(new FetchUsersSuccess(usersWithSimulatedData)); //dispara acción de exito
       }),
       catchError(error => {
         const errorMessage = 'Error al cargar usuarios: ' + (error.message || 'Error desconocido');
-        this.store.dispatch(new FetchUsersFailture(errorMessage)); //Dispara acción de fallo
+        this.store.dispatch(new FetchUsersFailure(errorMessage)); //Dispara acción de fallo
         return throwError(() => new Error(errorMessage));
       })
     );

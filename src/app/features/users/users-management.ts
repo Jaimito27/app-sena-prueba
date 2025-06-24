@@ -3,9 +3,9 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { UserService } from '../../core/services/user.service';
-import { SelectUser, UserState } from '../../state/user.state';
+import { FetchUsers, SelectUser, UserState } from '../../state/user.state';
 import { User } from '../../shared/models/user.interface';
-import { Observable, take } from 'rxjs';
+import { Observable, Subject, take, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-users',
@@ -19,28 +19,63 @@ export class Users implements OnInit {
   private store = inject(Store);
   private userService = inject(UserService); //inyecta el servicio de usuaros
 
-  @Select(UserState.allUsers) allUsers$!: Observable<User[]>;
-  @Select(UserState.isLoading) isLoading$!: Observable<boolean>;
-  @Select(UserState.usersError) usersError$!: Observable<string | null>;
-  @Select(UserState.selectedUser) selectedUser$!: Observable<User | null>;
-
+  allUsers$!: Observable<User[]>;
+  isLoading$!: Observable<boolean>;
+  usersError$!: Observable<string | null>;
+  selectedUser$!: Observable<User | null>;
+  private destroy$ = new Subject<void>();
+  users: User[] = [];
   filteredUsers: User[] = [];
-  selectedTenantId: number = 0; //0 para todos los tenants
+  selectedTenantId: string | null = null;
 
   ngOnInit(): void {
-    this.userService.getUsers().subscribe(); //inicia la craga de usuarios
 
-    //suscribirse a los cambos en allUsers$ y selectedTenantId para aplicar el filtro
-    this.allUsers$.subscribe(users => {
-      this.applyFilter(users)
+    //asignando los observables a los selectores directamente
+    this.allUsers$ = this.store.select(UserState.allUsers);
+    this.isLoading$ = this.store.select(UserState.isLoading);
+    this.usersError$ = this.store.select(UserState.usersError);
+    this.selectedUser$ = this.store.select(UserState.selectedUser);
+
+    console.log('Value of this.allUsers$ (after assignment):', this.allUsers$);
+
+
+     this.userService.getUsers().subscribe({
+      next: () =>{      
+      }, error: (error) => {
+        console.log(error);
+      }
+     });
+    //disparar la carga inicial de usuarios
+
+    this.store.dispatch(new FetchUsers());
+    //subscribirse a los cambios en allUsers$ para aplicar el filtro
+    this.allUsers$.pipe(takeUntil(this.destroy$)).subscribe(users => {
+      this.users = users;
+      this.applyFilter();
+
+    })
+
+    this.isLoading$.pipe(takeUntil(this.destroy$)).subscribe(loading => {
+      console.log(loading);
+    })
+
+     this.usersError$.pipe(takeUntil(this.destroy$)).subscribe(error => {
+      if (error) {
+        console.error('7. Users Component: usersError$ updated:', error);
+        // Aquí podrías mostrar una notificación toast o similar
+      }
+    });
+
+    this.selectedUser$.pipe(takeUntil(this.destroy$)).subscribe(user => {
+      console.log('8. Users Component: selectedUser$ updated:', user);
     });
   }
 
-  private applyFilter(users: User[]): void {
-    if (this.selectedTenantId === 0) {
-      this.filteredUsers = users;
+  applyFilter(): void {
+    if (this.selectedTenantId === null || this.selectedTenantId ==='Todos los Tenants') {
+      this.filteredUsers = [...this.users];
     } else {
-      this.filteredUsers = users.filter(user => user.tenantId === this.selectedTenantId);
+      this.filteredUsers = this.users.filter(user => user.tenantId === this.selectedTenantId);
     }
   }
 
@@ -48,7 +83,7 @@ export class Users implements OnInit {
     // Al hacer clic en el botón, fuerza la reevaluación del filtro
     // La suscripción en ngOnInit ya maneja esto, pero esto es más explícito para el botón
 
-    this.allUsers$.pipe(take(1)).subscribe(users => this.applyFilter(users));
+    this.applyFilter()
   }
 
   viewDetails(user: User): void {
@@ -60,12 +95,12 @@ export class Users implements OnInit {
   }
 
   //metodos para crud
-  editUser(user: User): void {
+  onEditUser(user: User): void {
     console.log('Simulando edición de usuarios', user);
     this.userService.simulatedUpdateUser(user);
   }
 
-  deleteUser(userId: number): void {
+  onDeleteUser(userId: number): void {
     if (confirm('¿Estas seguro de que quieres eliminar este usuario?')) {
       console.log('Simulnando eliminación de usuario con ID: ', userId);
       this.userService.simulatedDeleteUser(userId)

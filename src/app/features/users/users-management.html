@@ -1,79 +1,83 @@
- <div class="container is-fluid mt-4">
-      <h1 class="title is-3">Gestión de Usuarios</h1>
+<div class="container">
+  <h1 class="title">Gestión de Usuarios</h1>
 
-      <div class="field is-horizontal">
-        <div class="field-label is-normal">
-          <label class="label">Filtrar por Tenant ID:</label>
-        </div>
-        <div class="field-body">
-          <div class="field is-narrow">
-            <div class="control">
-              <div class="select">
-                <select [(ngModel)]="selectedTenantId">
-                  <option [value]="0">Todos</option>
-                  <option [value]="1">Tenant 1</option>
-                  <option [value]="2">Tenant 2</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div class="field">
-            <p class="control">
-              <button class="button is-primary" (click)="filterUsers()">Aplicar Filtro</button>
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <progress class="progress is-small is-primary" max="100" *ngIf="isLoading$ | async">Cargando usuarios...</progress>
-
-      <div class="notification is-danger" *ngIf="usersError$ | async as error">
-        {{ error }}
-      </div>
-
-      <table class="table is-striped is-hoverable is-fullwidth" *ngIf="!(isLoading$ | async)">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre de Usuario</th>
-            <th>Email</th>
-            <th>Roles</th>
-            <th>Tenant ID</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let user of filteredUsers">
-            <td>{{ user.id }}</td>
-            <td>{{ user.username }}</td>
-            <td>{{ user.email }}</td>
-            <td><span class="tag is-info is-light mr-1" *ngFor="let role of user.roles">{{ role }}</span></td>
-            <td>{{ user.tenantId }}</td>
-            <td>
-              <button class="button is-small is-info mr-2" (click)="viewDetails(user)">Ver Detalles</button>
-              </td>
-          </tr>
-          <tr *ngIf="filteredUsers.length === 0">
-            <td colspan="6" class="has-text-centered">No hay usuarios para mostrar.</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div class="modal" [ngClass]="{'is-active': (selectedUser$ | async)}">
-        <div class="modal-background" (click)="closeDetails()"></div>
-        <div class="modal-content">
-          <div class="box">
-            <h3 class="title is-4">Detalles del Usuario</h3>
-            <div *ngIf="selectedUser$ | async as user">
-              <p><strong>ID:</strong> {{ user.id }}</p>
-              <p><strong>Username:</strong> {{ user.username }}</p>
-              <p><strong>Email:</strong> {{ user.email }}</p>
-              <p><strong>Nombre:</strong> {{ user.firstName }} {{ user.lastName }}</p>
-              <p><strong>Roles:</strong> <span class="tag is-info is-light mr-1" *ngFor="let role of user.roles">{{ role }}</span></p>
-              <p><strong>Tenant ID:</strong> {{ user.tenantId }}</p>
-            </div>
-            <button class="modal-close is-large" aria-label="close" (click)="closeDetails()"></button>
-          </div>
-        </div>
-      </div>
+  <div class="field">
+    <label class="label">Filtrar por Tenant ID:</label>
+    <div class="control">
+      <select class="input" [(ngModel)]="selectedTenantId" (change)="applyFilter()">
+        <option [ngValue]="null">Todos los Tenants</option>
+        <option value="tenant1">Tenant 1</option>
+        <option value="tenant2">Tenant 2</option>
+        </select>
     </div>
+  </div>
+
+  <div class="buttons">
+    <button class="button is-primary" (click)="filterUsers()">Aplicar Filtro</button>
+  </div>
+
+  <div *ngIf="isLoading$ | async" class="notification is-info">
+    Cargando usuarios...
+  </div>
+
+  <div *ngIf="usersError$ | async as error" class="notification is-danger">
+    <strong>Error:</strong> {{ error }}
+  </div>
+
+  <table class="table is-fullwidth is-striped is-hoverable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Nombre Completo</th>
+        <th>Roles</th>
+        <th>Tenant ID</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of filteredUsers">
+        <td>{{ user.id }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.firstName }} {{ user.lastName }}</td>
+        <td>
+          <span class="tag is-light mr-1" *ngFor="let role of user.roles">{{ role }}</span>
+        </td>
+        <td>{{ user.tenantId }}</td>
+        <td>
+          <button class="button is-small is-info mr-2" (click)="viewDetails(user)">Ver Detalles</button>
+          <button class="button is-small is-warning mr-2" (click)="onEditUser(user)">Editar</button>
+          <button class="button is-small is-danger" (click)="onDeleteUser(user.id)">Eliminar</button>
+        </td>
+      </tr>
+      <tr *ngIf="filteredUsers.length === 0 && !(isLoading$ | async)">
+        <td colspan="7" class="has-text-centered">No hay usuarios para mostrar.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="modal" [ngClass]="{'is-active': (selectedUser$ | async)}">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Detalles del Usuario</p>
+        <button class="delete" aria-label="close" (click)="closeDetails()"></button>
+      </header>
+      <section class="modal-card-body">
+        <div *ngIf="selectedUser$ | async as user">
+          <p><strong>ID:</strong> {{ user.id }}</p>
+          <p><strong>Username:</strong> {{ user.username }}</p>
+          <p><strong>Email:</strong> {{ user.email }}</p>
+          <p><strong>Nombre:</strong> {{ user.firstName }} {{ user.lastName }}</p>
+          <p><strong>Roles:</strong> <span class="tag is-light mr-1" *ngFor="let role of user.roles">{{ role }}</span></p>
+          <p><strong>Tenant ID:</strong> {{ user.tenantId }}</p>
+        </div>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button" (click)="closeDetails()">Cerrar</button>
+      </footer>
+    </div>
+  </div>
+</div>

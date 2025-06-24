@@ -29,7 +29,7 @@ export class AuthService {
           const simulatedUser: User = {
             ...user,
             roles: user.id === 1 ? ['admin', 'user'] : ['user'], //user con id es admin
-            tenantId: user.id % 2 === 0 ? 1 : 2, //alternar tendadid para simular
+            tenantId: user.id % 2 === 0 ? 'tenant1' : 'tenant2', //alternar tendadid para simular
           };
 
           const simulatedToken = `fake-jwt-token-${user.id}-${Date.now()}`;
@@ -100,7 +100,7 @@ export class AuthService {
         const simulatedUser: User = {
           ...newUser,
           roles: ['user'], //por defecto, nuevos usuario son 'user'
-          tenantId: Math.floor(Math.random() * 2) + 1, //asignar un tenant id aleatorio
+          tenantId: (Math.floor(Math.random() * 2) + 1).toString(), //asignar un tenant id aleatorio
         };
         const simulatedToken = `fake-jwt-token-new-<span class="math-inline">\{newUser\.id\}\-</span>{Date.now()}`;
         this.store.dispatch(new SetUser(simulatedUser, simulatedToken));

@@ -7,5 +7,5 @@ export interface User {
   gender: string;
   image: string;
   roles: string[];
-  tenantId: number;
+  tenantId: string;
 }

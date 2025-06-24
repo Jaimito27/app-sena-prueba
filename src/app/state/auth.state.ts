@@ -73,7 +73,7 @@ export class AuthState {
   }
 
   @Selector()
-  static userTenantId(state: AuthStateModel): number | null {
+  static userTenantId(state: AuthStateModel): string | null {
     return state.user?.tenantId || null;
   }
 
