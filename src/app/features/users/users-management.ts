@@ -39,12 +39,12 @@ export class Users implements OnInit {
     console.log('Value of this.allUsers$ (after assignment):', this.allUsers$);
 
 
-     this.userService.getUsers().subscribe({
-      next: () =>{      
+    this.userService.getUsers().subscribe({
+      next: () => {
       }, error: (error) => {
         console.log(error);
       }
-     });
+    });
     //disparar la carga inicial de usuarios
 
     this.store.dispatch(new FetchUsers());
@@ -59,7 +59,7 @@ export class Users implements OnInit {
       console.log(loading);
     })
 
-     this.usersError$.pipe(takeUntil(this.destroy$)).subscribe(error => {
+    this.usersError$.pipe(takeUntil(this.destroy$)).subscribe(error => {
       if (error) {
         console.error('7. Users Component: usersError$ updated:', error);
         // Aquí podrías mostrar una notificación toast o similar
@@ -72,7 +72,7 @@ export class Users implements OnInit {
   }
 
   applyFilter(): void {
-    if (this.selectedTenantId === null || this.selectedTenantId ==='Todos los Tenants') {
+    if (this.selectedTenantId === null || this.selectedTenantId === 'Todos los Tenants') {
       this.filteredUsers = [...this.users];
     } else {
       this.filteredUsers = this.users.filter(user => user.tenantId === this.selectedTenantId);
@@ -93,18 +93,62 @@ export class Users implements OnInit {
   closeDetails(): void {
     this.store.dispatch(new SelectUser(null));
   }
+  //editar y agregar
+  isEditModalActive: boolean = false;
+  currentUserForm: User = this.resetUserForm(); //objeto para el formulario
+  isEditMode: boolean = false
+
+  private resetUserForm(): User {
+    return {
+      id: 0,
+      email: '',
+      username: '',
+      firstName: '',
+      lastName: '',
+      gender: '',
+      image: '',
+      roles: ['user'],
+      tenantId: 'tenant1',
+    };
+  }
+
+  openAddUserModal(): void {
+    this.isEditMode = false;
+    this.currentUserForm = this.resetUserForm();
+    this.isEditModalActive = true;
+  }
 
   //metodos para crud
   onEditUser(user: User): void {
+    this.isEditMode = true;
+    this.currentUserForm = { ...user };
+    this.isEditModalActive = true;
     console.log('Simulando edición de usuarios', user);
-    this.userService.simulatedUpdateUser(user);
   }
 
+  closeEditModal(): void {
+    this.isEditModalActive = false;
+    this.currentUserForm = this.resetUserForm(); //limpia el formulario al cerrar
+
+  }
   onDeleteUser(userId: number): void {
     if (confirm('¿Estas seguro de que quieres eliminar este usuario?')) {
       console.log('Simulnando eliminación de usuario con ID: ', userId);
       this.userService.simulatedDeleteUser(userId)
     }
+  }
+
+  saveUser(): void {
+    if (this.isEditMode) {
+      //llama al método de actualización simulado del servicio
+      this.userService.simulatedUpdateUser(this.currentUserForm);
+      console.log('Users Component: Attempting to update user:', this.currentUserForm);
+    } else {
+      //llama al metodo de adición
+      this.userService.simulatedAddUser(this.currentUserForm);
+      console.log('Users Component: Attempting to add new user:', this.currentUserForm);
+    }
+    this.closeEditModal(); //cierra el modal luego de guardar
   }
 
 }

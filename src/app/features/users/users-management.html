@@ -4,16 +4,19 @@
   <div class="field">
     <label class="label">Filtrar por Tenant ID:</label>
     <div class="control">
-      <select class="input" [(ngModel)]="selectedTenantId" (change)="applyFilter()">
-        <option [ngValue]="null">Todos los Tenants</option>
-        <option value="tenant1">Tenant 1</option>
-        <option value="tenant2">Tenant 2</option>
+      <div class="select">
+        <select [(ngModel)]="selectedTenantId" (change)="applyFilter()">
+          <option [ngValue]="null">Todos los Tenants</option>
+          <option value="tenant1">Tenant 1</option>
+          <option value="tenant2">Tenant 2</option>
         </select>
+      </div>
     </div>
   </div>
 
   <div class="buttons">
     <button class="button is-primary" (click)="filterUsers()">Aplicar Filtro</button>
+    <button class="button is-success" (click)="openAddUserModal()">Añadir Nuevo Usuario</button>
   </div>
 
   <div *ngIf="isLoading$ | async" class="notification is-info">
@@ -77,6 +80,76 @@
       </section>
       <footer class="modal-card-foot">
         <button class="button" (click)="closeDetails()">Cerrar</button>
+      </footer>
+    </div>
+  </div>
+
+  <div class="modal" [ngClass]="{'is-active': isEditModalActive}">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">{{ isEditMode ? 'Editar Usuario' : 'Añadir Nuevo Usuario' }}</p>
+        <button class="delete" aria-label="close" (click)="closeEditModal()"></button>
+      </header>
+      <section class="modal-card-body">
+        <form (ngSubmit)="saveUser()">
+          <div class="field">
+            <label class="label" for="username">Username</label>
+            <div class="control">
+              <input class="input" type="text" id="username" name="username" [(ngModel)]="currentUserForm.username" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" for="email">Email</label>
+            <div class="control">
+              <input class="input" type="email" id="email" name="email" [(ngModel)]="currentUserForm.email" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" for="firstName">Nombre</label>
+            <div class="control">
+              <input class="input" type="text" id="firstName" name="firstName" [(ngModel)]="currentUserForm.firstName" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" for="lastName">Apellido</label>
+            <div class="control">
+              <input class="input" type="text" id="lastName" name="lastName" [(ngModel)]="currentUserForm.lastName" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" for="roles">Roles</label>
+            <div class="control">
+              <div class="select is-multiple">
+                <select id="roles" name="roles" [(ngModel)]="currentUserForm.roles" multiple size="2">
+                  <option value="user">user</option>
+                  <option value="admin">admin</option>
+                </select>
+              </div>
+              <p class="help">Ctrl/Cmd + click para seleccionar múltiples</p>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" for="tenantId">Tenant ID</label>
+            <div class="control">
+              <div class="select">
+                <select id="tenantId" name="tenantId" [(ngModel)]="currentUserForm.tenantId" required>
+                  <option value="tenant1">Tenant 1</option>
+                  <option value="tenant2">Tenant 2</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          </form>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button is-success" (click)="saveUser()">{{ isEditMode ? 'Guardar Cambios' : 'Añadir Usuario' }}</button>
+        <button class="button" (click)="closeEditModal()">Cancelar</button>
       </footer>
     </div>
   </div>
