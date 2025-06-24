@@ -1,7 +1,7 @@
 import { inject } from "@angular/core";
 import { CanActivateFn, Router } from "@angular/router";
 import { Store } from "@ngxs/store";
-import { AuthState } from "../../state/auth.state";
+import { AuthState, Logout } from "../../state/auth.state";
 import { map, take } from "rxjs";
 
 export const AuthGuard: CanActivateFn = (route, state) => {
@@ -11,11 +11,12 @@ export const AuthGuard: CanActivateFn = (route, state) => {
   return store.select(AuthState.isAuthenticated).pipe(
     take(1), // Toma el valor actual y completa el observable
     map(isAuthenticated => {
-      if(isAuthenticated){
+      if (isAuthenticated) {
         return true;
-      }else{
+      } else {
         console.warn('Acceso denegado: Usuario no autenticado. Redirigiendo');
-        router.navigate(['/auth/login'])
+        store.dispatch(new Logout()); //desloguea (limpia estado, storage)
+        router.navigate(['/auth/login'], { queryParams: { reason: 'expired' } })
         return false;
       }
     })
