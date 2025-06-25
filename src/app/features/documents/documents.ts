@@ -29,6 +29,8 @@ export class Documents implements OnInit, OnDestroy {
   isEditMode: boolean = false;
   currentDocumentForm: Document = this.resetDocumentForm();
 
+   isAuthenticated$!: Observable<boolean>;
+   isAdmin$!: Observable<boolean>;
 
   //variable para filtro y busqueda
   searchQuery: string = '';
@@ -44,6 +46,9 @@ export class Documents implements OnInit, OnDestroy {
     this.isLoading$ = this.store.select(DocumentsState.isLoading);
     this.documentsError$ = this.store.select(DocumentsState.documentsError);
     this.selectedDocument$ = this.store.select(DocumentsState.selectedDocument);
+
+    this.isAuthenticated$ = this.store.select(AuthState.isAuthenticated);
+    this.isAdmin$ = this.store.select(AuthState.isAdmin)
 
     // Para `documents$`, necesitamos observar los documentos filtrados del estado y luego aplicar el propio filtro de búsqueda.
 

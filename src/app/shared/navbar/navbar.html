@@ -10,16 +10,18 @@
       <a class="navbar-item" routerLink="/dashboard" routerLinkActive="is-active">
         Dashboard
       </a>
+      @if(isAdmin$ || isUser$ | async){
       <a class="navbar-item" routerLink="/documents" routerLinkActive="is-active">
         Documentos
       </a>
-      <!-- <a class="navbar-item" routerLink="/users" routerLinkActive="is-active" *ngIf="isAdmin$ | async">
-        Gestión de Usuarios
-      </a> -->
-
-      <a class="navbar-item" routerLink="/users" routerLinkActive="is-active">
+      }
+      @if(isAdmin$ | async){
+     <a class="navbar-item" routerLink="/users" routerLinkActive="is-active">
         Gestión de Usuarios
       </a>
+      }
+
+
     </div>
 
     <div class="navbar-end">

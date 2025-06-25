@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { UserService } from '../../core/services/user.service';
 import { FetchUsers, SelectUser, UserState } from '../../state/user.state';
 import { User } from '../../shared/models/user.interface';
 import { Observable, Subject, take, takeUntil } from 'rxjs';
+import { AuthState } from '../../state/auth.state';
 
 @Component({
   selector: 'app-users',
@@ -14,7 +15,7 @@ import { Observable, Subject, take, takeUntil } from 'rxjs';
   templateUrl: './users-management.html',
   styleUrl: './users-management.scss'
 })
-export class Users implements OnInit {
+export class Users implements OnInit, OnDestroy {
 
   private store = inject(Store);
   private userService = inject(UserService); //inyecta el servicio de usuaros
@@ -27,8 +28,20 @@ export class Users implements OnInit {
   users: User[] = [];
   filteredUsers: User[] = [];
   selectedTenantId: string | null = null;
-
+  currentTenantId: string | null = null;
+  isAdmin = false;
   ngOnInit(): void {
+
+
+    this.store.select(AuthState.userTenantId).pipe(takeUntil(this.destroy$)).subscribe(tenantId => {
+      this.currentTenantId = tenantId;
+      this.applyFilter();
+    })
+
+    this.store.select(AuthState.isAdmin).pipe(takeUntil(this.destroy$)).subscribe(isAdmin => {
+      this.isAdmin = isAdmin;
+      this.applyFilter();
+    })
 
     //asignando los observables a los selectores directamente
     this.allUsers$ = this.store.select(UserState.allUsers);
@@ -72,10 +85,18 @@ export class Users implements OnInit {
   }
 
   applyFilter(): void {
-    if (this.selectedTenantId === null || this.selectedTenantId === 'Todos los Tenants') {
-      this.filteredUsers = [...this.users];
+    if (this.isAdmin) {
+      //el admin puede ver todos los tenant
+      if (this.selectedTenantId === null || this.selectedTenantId === 'Todos los Tenants') {
+        this.filteredUsers = [...this.users];
+      } else {
+        this.filteredUsers = this.users.filter(user => user.tenantId === this.selectedTenantId);
+      }
+    } else if (this.currentTenantId) {
+      //usuario normal solo ver su tenant
+      this.filteredUsers = this.users.filter(user => user.tenantId === this.currentTenantId);
     } else {
-      this.filteredUsers = this.users.filter(user => user.tenantId === this.selectedTenantId);
+      this.filteredUsers = [];
     }
   }
 
@@ -151,4 +172,8 @@ export class Users implements OnInit {
     this.closeEditModal(); //cierra el modal luego de guardar
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete()
+  }
 }

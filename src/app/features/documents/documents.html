@@ -8,11 +8,11 @@
         (input)="applySearchFilter()">
     </div>
   </div>
-
+  @if (isAdmin$ | async) {
   <div class="buttons">
     <button class="button is-success" (click)="openAddDocumentModal()">Añadir Nuevo Documento</button>
   </div>
-
+  }
   <div *ngIf="isLoading$ | async" class="notification is-info">
     Cargando documentos...
   </div>
@@ -47,8 +47,10 @@
         </td>
         <td>
           <button class="button is-small is-info mr-2" (click)="viewDetails(document)">Ver Detalles</button>
+          @if(isAdmin$ | async){
           <button class="button is-small is-warning mr-2" (click)="onEditDocument(document)">Editar</button>
           <button class="button is-small is-danger" (click)="onDeleteDocument(document.id)">Eliminar</button>
+          }
         </td>
       </tr>
       <tr *ngIf="filteredAndSearchedDocuments.length === 0 && !(isLoading$ | async)">
@@ -85,6 +87,7 @@
   <div class="modal" [ngClass]="{'is-active': isDocumentFormModalActive}">
     <div class="modal-background"></div>
     <div class="modal-card">
+
       <header class="modal-card-head">
         <p class="modal-card-title">{{ isEditMode ? 'Editar Documento' : 'Añadir Nuevo Documento' }}</p>
         <button class="delete" aria-label="close" (click)="closeDocumentFormModal()"></button>

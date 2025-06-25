@@ -75,6 +75,11 @@ export class AuthState {
     return state.user?.roles?.includes('admin') || false;
   }
 
+   @Selector()
+  static isUser(state: AuthStateModel): boolean {
+    return state.user?.roles?.includes('user') || false;
+  }
+
   @Selector()
   static userTenantId(state: AuthStateModel): string | null {
     return state.user?.tenantId || null;

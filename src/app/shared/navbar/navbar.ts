@@ -20,10 +20,12 @@ export class Navbar implements OnInit {
 
   isAuthenticated$!: Observable<boolean>;
   isAdmin$!: Observable<boolean>;
+  isUser$!: Observable<boolean>;
 
   ngOnInit(): void {
     this.isAuthenticated$ = this.store.select(AuthState.isAuthenticated);
     this.isAdmin$ = this.store.select(AuthState.isAdmin);
+    this.isUser$ = this.store.select(AuthState.isUser)
   }
   constructor() { }
 

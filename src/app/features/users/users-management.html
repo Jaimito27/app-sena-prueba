@@ -1,6 +1,6 @@
 <div class="container">
   <h1 class="title">Gestión de Usuarios</h1>
-
+  @if(isAdmin){
   <div class="field">
     <label class="label">Filtrar por Tenant ID:</label>
     <div class="control">
@@ -13,20 +13,25 @@
       </div>
     </div>
   </div>
-
   <div class="buttons">
     <button class="button is-primary" (click)="filterUsers()">Aplicar Filtro</button>
     <button class="button is-success" (click)="openAddUserModal()">Añadir Nuevo Usuario</button>
   </div>
 
-  <div *ngIf="isLoading$ | async" class="notification is-info">
+  }
+
+  @if(isLoading$ | async){
+  <div class="notification is-info">
     Cargando usuarios...
   </div>
-
-  <div *ngIf="usersError$ | async as error" class="notification is-danger">
+  }
+  @if(usersError$ | async; as error) {
+  @if(error && error.trim().length > 0) {
+  <div class="notification is-danger">
     <strong>Error:</strong> {{ error }}
   </div>
-
+  }
+  }
   <table class="table is-fullwidth is-striped is-hoverable">
     <thead>
       <tr>
@@ -51,8 +56,13 @@
         <td>{{ user.tenantId }}</td>
         <td>
           <button class="button is-small is-info mr-2" (click)="viewDetails(user)">Ver Detalles</button>
-          <button class="button is-small is-warning mr-2" (click)="onEditUser(user)">Editar</button>
-          <button class="button is-small is-danger" (click)="onDeleteUser(user.id)">Eliminar</button>
+
+
+          <button class="button is-small is-warning mr-2" (click)="onEditUser(user)"
+            *ngIf="isAdmin || user.tenantId === currentTenantId">Editar</button>
+          <button class="button is-small is-danger" (click)="onDeleteUser(user.id)"
+            *ngIf="isAdmin || user.tenantId === currentTenantId">Eliminar</button>
+
         </td>
       </tr>
       <tr *ngIf="filteredUsers.length === 0 && !(isLoading$ | async)">
@@ -74,7 +84,8 @@
           <p><strong>Username:</strong> {{ user.username }}</p>
           <p><strong>Email:</strong> {{ user.email }}</p>
           <p><strong>Nombre:</strong> {{ user.firstName }} {{ user.lastName }}</p>
-          <p><strong>Roles:</strong> <span class="tag is-light mr-1" *ngFor="let role of user.roles">{{ role }}</span></p>
+          <p><strong>Roles:</strong> <span class="tag is-light mr-1" *ngFor="let role of user.roles">{{ role }}</span>
+          </p>
           <p><strong>Tenant ID:</strong> {{ user.tenantId }}</p>
         </div>
       </section>
@@ -96,7 +107,8 @@
           <div class="field">
             <label class="label" for="username">Username</label>
             <div class="control">
-              <input class="input" type="text" id="username" name="username" [(ngModel)]="currentUserForm.username" required>
+              <input class="input" type="text" id="username" name="username" [(ngModel)]="currentUserForm.username"
+                required>
             </div>
           </div>
 
@@ -110,14 +122,16 @@
           <div class="field">
             <label class="label" for="firstName">Nombre</label>
             <div class="control">
-              <input class="input" type="text" id="firstName" name="firstName" [(ngModel)]="currentUserForm.firstName" required>
+              <input class="input" type="text" id="firstName" name="firstName" [(ngModel)]="currentUserForm.firstName"
+                required>
             </div>
           </div>
 
           <div class="field">
             <label class="label" for="lastName">Apellido</label>
             <div class="control">
-              <input class="input" type="text" id="lastName" name="lastName" [(ngModel)]="currentUserForm.lastName" required>
+              <input class="input" type="text" id="lastName" name="lastName" [(ngModel)]="currentUserForm.lastName"
+                required>
             </div>
           </div>
 
@@ -145,10 +159,11 @@
               </div>
             </div>
           </div>
-          </form>
+        </form>
       </section>
       <footer class="modal-card-foot">
-        <button class="button is-success" (click)="saveUser()">{{ isEditMode ? 'Guardar Cambios' : 'Añadir Usuario' }}</button>
+        <button class="button is-success" (click)="saveUser()">{{ isEditMode ? 'Guardar Cambios' : 'Añadir Usuario'
+          }}</button>
         <button class="button" (click)="closeEditModal()">Cancelar</button>
       </footer>
     </div>

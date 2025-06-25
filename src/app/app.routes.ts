@@ -14,18 +14,17 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
-    //canActivate: [AuthGuard],
     loadChildren: () => import('./features/dashboard/dashboard.routes').then(m => m.DASHBOARD_ROUTES)
   },
   {
     path: 'users',
-    // canActivate: [AuthGuard, RoleGuard],
-    // data: { roles: ['admin'] },
+    canActivate: [AuthGuard, RoleGuard],
+    data: { roles: ['admin'] },
     loadChildren: () => import('./features/users/users.routes').then(m => m.USERS_ROUTES)
   },
   {
     path: 'documents',
-    // canActivate: [AuthGuard],
+    canActivate: [AuthGuard],
     loadChildren: () => import('./features/documents/documents.routes').then(m => m.DOCUMENTS_ROUTES)
   },
   {
