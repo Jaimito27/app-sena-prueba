@@ -1,0 +1,103 @@
+@use '../../../styles.scss' as *;
+
+
+.custom-login-card {
+  background-color: $card-bg !important;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.22), 0 2px 8px rgba($primary, 0.08);
+  border: 1.5px solid lighten($card-bg, 7%);
+}
+
+.custom-login-title {
+  color: $primary;
+  font-weight: 800;
+  margin-bottom: 2rem;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 8px rgba($primary, .08);
+}
+
+.custom-login-label {
+  color: $text-muted;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.custom-login-input {
+  border-radius: 7px;
+  border: 1.5px solid lighten($primary, 12%);
+  background: lighten($card-bg, 4%);
+  font-weight: 500;
+  color: $text-main;
+  &::placeholder {
+    color: $text-muted;
+    font-weight: 400;
+    opacity: 0.8;
+  }
+  &:focus {
+    border-color: $secondary;
+    box-shadow: 0 0 0 2px rgba($secondary,0.18);
+    background: lighten($card-bg, 10%);
+    color: $text-main;
+  }
+}
+
+.custom-login-btn {
+  background: $primary;
+  color: #fff;
+  border: none;
+  font-weight: 800;
+  border-radius: 7px;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba($primary,0.12);
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  &:hover, &:focus {
+    background: $secondary;
+    color: $background;
+    box-shadow: 0 4px 24px rgba($secondary,0.13);
+  }
+  &:disabled {
+    background: lighten($primary, 14%);
+    color: $text-muted;
+    opacity: 0.85;
+    cursor: not-allowed;
+  }
+}
+
+.custom-link {
+  color: $secondary;
+  font-weight: 600;
+  text-decoration: underline dotted;
+  transition: color 0.2s;
+  &:hover {
+    color: lighten($secondary, 10%);
+    text-decoration: underline;
+  }
+}
+
+.custom-login-error {
+  border-radius: 7px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  background: $tertiary;
+  color: #fff;
+  border: none;
+}
+
+.custom-login-warning {
+  border-radius: 7px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  background: $secondary;
+  color: $background;
+  border: none;
+}
+
+@media (max-width: 900px) {
+  .column.is-one-third {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  .custom-login-card {
+    margin: 0 0.5rem;
+  }
+}

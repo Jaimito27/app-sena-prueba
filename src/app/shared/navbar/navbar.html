@@ -1,43 +1,78 @@
-<nav class="navbar is-light" role="navigation" aria-label="main navigation">
+<nav class="navbar custom-navbar" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
-    <a class="navbar-item" routerLink="/dashboard">
-      <p class="title is-5 has-text-primary">App Multitenant</p>
+    <a class="navbar-item custom-navbar-title" routerLink="/dashboard">
+      <span class="icon-text">
+        <span class="icon">
+          <i class="fas fa-layer-group"></i>
+        </span>
+        <span class="title is-5">App Multitenant</span>
+      </span>
+    </a>
+    <!-- Hamburger for mobile -->
+    <a role="button"
+       class="navbar-burger"
+       [ngClass]="{'is-active': navbarOpen}"
+       aria-label="menu"
+       aria-expanded="false"
+       (click)="toggleNavbar()">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
     </a>
   </div>
 
-  <div id="navbarBasicExample" class="navbar-menu">
+  <div id="navbarBasicExample" class="navbar-menu" [ngClass]="{'is-active': navbarOpen}">
     <div class="navbar-start">
-      <a class="navbar-item" routerLink="/dashboard" routerLinkActive="is-active">
-        Dashboard
+      <a class="navbar-item"
+         routerLink="/dashboard"
+         routerLinkActive="is-active"
+         [routerLinkActiveOptions]="{ exact: true }">
+        <span class="icon"><i class="fas fa-home"></i></span>
+        <span>Dashboard</span>
       </a>
-      @if(isAdmin$ || isUser$ | async){
-      <a class="navbar-item" routerLink="/documents" routerLinkActive="is-active">
-        Documentos
-      </a>
-      }
-      @if(isAdmin$ | async){
-     <a class="navbar-item" routerLink="/users" routerLinkActive="is-active">
-        Gestión de Usuarios
-      </a>
-      }
-
-
+      <ng-container *ngIf="(isAdmin$ | async) || (isUser$ | async)">
+        <a class="navbar-item"
+           routerLink="/documents"
+           routerLinkActive="is-active"
+           [routerLinkActiveOptions]="{ exact: true }">
+          <span class="icon"><i class="fas fa-file-alt"></i></span>
+          <span>Documentos</span>
+        </a>
+      </ng-container>
+      <ng-container *ngIf="(isAdmin$ | async)">
+        <a class="navbar-item"
+           routerLink="/users"
+           routerLinkActive="is-active"
+           [routerLinkActiveOptions]="{ exact: true }">
+          <span class="icon"><i class="fas fa-users-cog"></i></span>
+          <span>Gestión de Usuarios</span>
+        </a>
+      </ng-container>
     </div>
 
     <div class="navbar-end">
-      <div class="navbar-item">
+      <div class="navbar-item custom-navbar-buttons-container">
         <div class="buttons">
           <ng-container *ngIf="(isAuthenticated$ | async); else authButtons">
-            <button class="button is-light" (click)="onLogout()">
-              Cerrar Sesión
+            <button class="button is-light custom-navbar-logout" (click)="onLogout()">
+              <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
+              <span>Cerrar Sesión</span>
             </button>
           </ng-container>
           <ng-template #authButtons>
-            <a class="button is-primary" routerLink="/auth/register">
+            <a class="button is-primary custom-navbar-register"
+               routerLink="/auth/register"
+               routerLinkActive="is-active"
+               [routerLinkActiveOptions]="{ exact: true }">
+              <span class="icon"><i class="fas fa-user-plus"></i></span>
               <strong>Registrarse</strong>
             </a>
-            <a class="button is-light" routerLink="/auth/login">
-              Iniciar Sesión
+            <a class="button is-light custom-navbar-login"
+               routerLink="/auth/login"
+               routerLinkActive="is-active"
+               [routerLinkActiveOptions]="{ exact: true }">
+              <span class="icon"><i class="fas fa-sign-in-alt"></i></span>
+              <span>Iniciar Sesión</span>
             </a>
           </ng-template>
         </div>

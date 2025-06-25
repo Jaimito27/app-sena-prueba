@@ -1,0 +1,131 @@
+@use '../../../styles.scss' as *;
+
+.custom-navbar {
+  background: $card-bg;
+  border-bottom: 2.5px solid $primary;
+  box-shadow: 0 3px 18px rgba($primary, 0.14);
+  min-height: 4.5rem;
+
+  // Navbar Brand
+  .custom-navbar-title {
+    display: flex;
+    align-items: center;
+    .title {
+      color: $primary;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      margin-left: 0.5em;
+      text-shadow: 0 2px 8px rgba($primary, 0.10);
+    }
+    .icon {
+      color: $secondary;
+      font-size: 1.3em;
+    }
+  }
+
+  // Navbar Burger
+  .navbar-burger {
+    color: $primary;
+    &:hover {
+      color: $secondary;
+      background: none;
+    }
+  }
+
+  // Menú izquierdo: solo aquí hover y activo
+  > .navbar-menu > .navbar-start > .navbar-item {
+    color: $text-main;
+    font-weight: 600;
+    transition: background 0.2s, color 0.2s;
+    border-radius: 7px;
+
+    &:hover {
+      background: $primary;
+      color: $secondary !important;
+    }
+    &.is-active {
+      background: $primary !important;
+      color: $secondary !important;
+      box-shadow: 0 2px 8px rgba($secondary, 0.14);
+      border: 2px solid $secondary;
+      z-index: 2;
+      position: relative;
+    }
+    .icon {
+      color: $secondary;
+      margin-right: 0.4em;
+    }
+  }
+
+  // Quita hover y fondo a los elementos de la derecha
+  .navbar-end,
+  .custom-navbar-buttons-container,
+  .navbar-end .navbar-item {
+    background: transparent !important;
+    box-shadow: none !important;
+    &:hover,
+    &:focus {
+      background: transparent !important;
+      color: inherit !important;
+    }
+  }
+
+  // Botones de sesión (derecha)
+  .buttons .button {
+    border-radius: 7px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    position: relative;
+    border: none;
+
+    // Estado activo (ruta actual)
+    &.is-active {
+      background: $background !important;
+      color: $secondary !important;
+      border: 2px solid $secondary;
+      box-shadow: 0 2px 8px rgba($secondary, 0.14);
+      z-index: 2;
+      // Mantiene activo aunque pase el mouse
+      &:hover,
+      &:focus {
+        background: $background !important;
+        color: $secondary !important;
+      }
+    }
+
+    // Hover solo si NO está activo
+    &:not(.is-active):hover,
+    &:not(.is-active):focus {
+      background: $secondary !important;
+      color: $background !important;
+      box-shadow: 0 4px 14px rgba($secondary,0.13);
+      border-color: transparent;
+    }
+
+    &.is-primary,
+    &.custom-navbar-register {
+      background: $primary;
+      color: #fff;
+    }
+
+    &.is-light,
+    &.custom-navbar-login,
+    &.custom-navbar-logout {
+      background: lighten($card-bg, 7%);
+      color: $primary;
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .custom-navbar {
+    .navbar-menu {
+      background: $background;
+      box-shadow: 0 8px 24px rgba($primary,0.06);
+    }
+    .navbar-item {
+      border-radius: 0;
+    }
+  }
+}

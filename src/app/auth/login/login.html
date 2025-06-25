@@ -1,16 +1,19 @@
 <div class="columns is-centered mt-6">
-  <div *ngIf="sessionExpiredMsg" class="alert alert-warning">
+  <div *ngIf="sessionExpiredMsg" class="notification is-warning custom-login-warning mb-4">
     {{ sessionExpiredMsg }}
   </div>
   <div class="column is-one-third">
-    <div class="card">
+    <div class="card custom-login-card">
       <div class="card-content">
-        <p class="title is-4 has-text-centered">Iniciar Sesión</p>
+        <p class="title is-4 has-text-centered custom-login-title">Iniciar Sesión</p>
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
           <div class="field">
-            <label class="label">Correo Electrónico</label>
-            <div class="control">
-              <input class="input" type="email" formControlName="email" placeholder="tu@ejemplo.com">
+            <label class="label custom-login-label">Correo Electrónico</label>
+            <div class="control has-icons-left">
+              <input class="input custom-login-input" type="email" formControlName="email" placeholder="tu@ejemplo.com">
+              <span class="icon is-small is-left">
+                <i class="fas fa-envelope"></i>
+              </span>
             </div>
             <p class="help is-danger" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
               Correo es requerido y debe ser válido.
@@ -18,18 +21,21 @@
           </div>
 
           <div class="field">
-            <label class="label">Contraseña</label>
-            <div class="control">
-              <input class="input" type="password" formControlName="password" placeholder="********">
+            <label class="label custom-login-label">Contraseña</label>
+            <div class="control has-icons-left">
+              <input class="input custom-login-input" type="password" formControlName="password" placeholder="********">
+              <span class="icon is-small is-left">
+                <i class="fas fa-lock"></i>
+              </span>
             </div>
             <p class="help is-danger" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
               Contraseña es requerida.
             </p>
           </div>
 
-          <div class="field">
+          <div class="field mt-5">
             <div class="control has-text-centered">
-              <button class="button is-primary is-fullwidth" type="submit"
+              <button class="button custom-login-btn is-fullwidth" type="submit"
                 [disabled]="loginForm.invalid || (isLoading$ | async)">
                 <span *ngIf="(isLoading$ | async)" class="icon is-small"><i class="fas fa-spinner fa-spin"></i></span>
                 <span>Iniciar Sesión</span>
@@ -38,11 +44,15 @@
           </div>
 
           <div class="has-text-centered mt-4">
-            <p>¿No tienes cuenta? <a routerLink="/auth/register">Regístrate aquí</a></p>
-            <p><a routerLink="/auth/forgot-password">¿Olvidaste tu contraseña?</a></p>
+            <p>¿No tienes cuenta?
+              <a class="custom-link" routerLink="/auth/register">Regístrate aquí</a>
+            </p>
+            <p>
+              <a class="custom-link" routerLink="/auth/forgot-password">¿Olvidaste tu contraseña?</a>
+            </p>
           </div>
 
-          <div class="notification is-danger mt-4" *ngIf="errorMessage$ | async as error">
+          <div class="notification is-danger mt-4 custom-login-error" *ngIf="errorMessage$ | async as error">
             {{ error }}
           </div>
         </form>

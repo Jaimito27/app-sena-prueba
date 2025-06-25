@@ -13,10 +13,15 @@ import { Observable } from 'rxjs';
   styleUrl: './navbar.scss'
 })
 export class Navbar implements OnInit {
+
   private store = inject(Store);
   //selectores para obtener el estado de autenticación y el rol de admin
 
+  navbarOpen = false;
 
+  toggleNavbar() {
+    this.navbarOpen = !this.navbarOpen;
+  }
 
   isAuthenticated$!: Observable<boolean>;
   isAdmin$!: Observable<boolean>;
