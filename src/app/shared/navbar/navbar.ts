@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 import { AuthState, Logout } from '../../state/auth.state';
 import { Observable } from 'rxjs';
@@ -15,6 +15,7 @@ import { Observable } from 'rxjs';
 export class Navbar implements OnInit {
 
   private store = inject(Store);
+  private router = inject(Router)
   //selectores para obtener el estado de autenticación y el rol de admin
 
   navbarOpen = false;
@@ -36,5 +37,6 @@ export class Navbar implements OnInit {
 
   onLogout(): void {
     this.store.dispatch(new Logout());
+    this.router.navigate(['/dashboard'])
   }
 }

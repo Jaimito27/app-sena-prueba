@@ -5,6 +5,7 @@ import { User } from '../../../shared/models/user.interface';
 
 @Component({
   selector: 'app-user-form',
+  standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './user-form.html',
   styleUrl: './user-form.scss'

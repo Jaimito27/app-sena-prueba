@@ -92,7 +92,7 @@
         <p class="modal-card-title">{{ isEditMode ? 'Editar Documento' : 'Añadir Nuevo Documento' }}</p>
         <button class="delete" aria-label="close" (click)="closeDocumentFormModal()"></button>
       </header>
-      <section class="modal-card-body">
+      <!-- <section class="modal-card-body">
         <form (ngSubmit)="saveDocument()">
           <div class="field">
             <label class="label" for="docName">Nombre</label>
@@ -144,7 +144,12 @@
         <button class="button is-success" (click)="saveDocument()">{{ isEditMode ? 'Guardar Cambios' : 'Añadir
           Documento' }}</button>
         <button class="button" (click)="closeDocumentFormModal()">Cancelar</button>
-      </footer>
+      </footer> -->
+
+      <section class="modal-card-body">
+        <app-documents-form [document]="currentDocumentForm" [isEditMode]="isEditMode" (save)="onSaveDocument($event)"
+          (cancel)="closeDocumentFormModal()"></app-documents-form>
+      </section>
     </div>
   </div>
 </div>

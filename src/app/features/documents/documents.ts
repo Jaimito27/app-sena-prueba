@@ -7,11 +7,12 @@ import { combineLatest, debounceTime, filter, map, Observable, startWith, Subjec
 import { Document } from '../../shared/models/document.interface';
 import { DocumentsState, LoadDocuments, SelectDocument } from '../../state/document.state';
 import { AuthState } from '../../state/auth.state';
+import { DocumentsForm } from './documents-form/documents-form';
 
 @Component({
   selector: 'app-documents',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, DocumentsForm],
   templateUrl: './documents.html',
   styleUrl: './documents.scss'
 })
@@ -134,14 +135,14 @@ export class Documents implements OnInit, OnDestroy {
     this.currentDocumentForm = this.resetDocumentForm(); //limipiar formnulario al cerrar
   }
 
-  saveDocument(): void {
+  onSaveDocument(document: Document): void {
     if (this.isEditMode) {
-      this.documentService.simulatedUpdateDocument(this.currentDocumentForm).subscribe({
+      this.documentService.simulatedUpdateDocument(document).subscribe({
         next: () => console.log('Documento actualizado satisfactoriamente'),
         error: (err) => console.error('Error en la actualización del documento', err)
       });
     } else {
-      this.documentService.simulatedAddDocument(this.currentDocumentForm).subscribe({
+      this.documentService.simulatedAddDocument(document).subscribe({
         next: () => console.log('Documento creado exitosamente'),
         error: (err) => console.error('Error al crear documento', err)
       });

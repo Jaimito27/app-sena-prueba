@@ -1,0 +1,65 @@
+<form [formGroup]="documentForm" (ngSubmit)="onSubmit()" autocomplete="off">
+  <div class="field">
+    <label class="label" for="docName">Nombre</label>
+    <div class="control">
+      <input class="input" type="text" formControlName="name" id="docName" required
+        [class.is-danger]="documentForm.get('name')?.invalid && documentForm.get('name')?.touched" />
+    </div>
+    <p class="help is-danger" *ngIf="documentForm.get('name')?.invalid && documentForm.get('name')?.touched">
+      El nombre es requerido.
+    </p>
+  </div>
+
+  <div class="field">
+    <label class="label" for="docType">Tipo</label>
+    <div class="control">
+      <input class="input" type="text" formControlName="type" id="docType" required
+        [class.is-danger]="documentForm.get('type')?.invalid && documentForm.get('type')?.touched" />
+    </div>
+    <p class="help is-danger" *ngIf="documentForm.get('type')?.invalid && documentForm.get('type')?.touched">
+      El tipo es requerido.
+    </p>
+  </div>
+
+  <div class="field">
+    <label class="label" for="docSize">Tamaño (bytes)</label>
+    <div class="control">
+      <input class="input" type="number" formControlName="size" id="docSize" required
+        [class.is-danger]="documentForm.get('size')?.invalid && documentForm.get('size')?.touched" />
+    </div>
+    <p class="help is-danger" *ngIf="documentForm.get('size')?.invalid && documentForm.get('size')?.touched">
+      El tamaño debe ser mayor que 0.
+    </p>
+  </div>
+
+  <div class="field">
+    <label class="label" for="docUploadDate">Fecha Subida</label>
+    <div class="control">
+      <input class="input" type="date" formControlName="uploadDate" id="docUploadDate" required
+        [class.is-danger]="documentForm.get('uploadDate')?.invalid && documentForm.get('uploadDate')?.touched" />
+    </div>
+    <p class="help is-danger" *ngIf="documentForm.get('uploadDate')?.invalid && documentForm.get('uploadDate')?.touched">
+      La fecha es requerida.
+    </p>
+  </div>
+
+<div class="field">
+  <label class="label" for="docTags">Tags (separados por coma)</label>
+  <div class="control">
+      <input
+        class="input"
+        type="text"
+        id="docTags"
+        placeholder="ej: contrato, legal, finanzas"
+        [value]="getTagsAsString()"
+        (input)="updateTags($event)"
+        formControlName="tags"
+      />
+  </div>
+</div>
+
+  <footer class="modal-card-foot">
+    <button class="button is-success" type="submit">{{ isEditMode ? 'Guardar Cambios' : 'Añadir Documento' }}</button>
+    <button class="button" type="button" (click)="onCancel()">Cancelar</button>
+  </footer>
+</form>
