@@ -47,7 +47,7 @@
         </td>
         <td>
           <button class="button is-small is-info mr-2" (click)="viewDetails(document)">Ver Detalles</button>
-          @if(isAdmin$ | async){
+          @if(canEditOrDelete(document)){
           <button class="button is-small is-warning mr-2" (click)="onEditDocument(document)">Editar</button>
           <button class="button is-small is-danger" (click)="onDeleteDocument(document.id)">Eliminar</button>
           }

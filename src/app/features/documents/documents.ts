@@ -185,4 +185,10 @@ export class Documents implements OnInit, OnDestroy {
     this.currentDocumentForm.tags = value.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
   }
 
+  canEditOrDelete(document: Document): boolean {
+  const isAdmin = this.store.selectSnapshot(AuthState.isAdmin); // síncrono
+  const currentTenantId = this.store.selectSnapshot(AuthState.userTenantId); // síncrono
+  return isAdmin || document.tenantId === currentTenantId;
+}
+
 }
