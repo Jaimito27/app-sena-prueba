@@ -1,0 +1,109 @@
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()" autocomplete="off">
+  <div class="field">
+    <label class="label" for="username">Username</label>
+    <div class="control">
+      <input
+        class="input"
+        type="text"
+        id="username"
+        formControlName="username"
+        required
+        [class.is-danger]="userForm.get('username')?.invalid && userForm.get('username')?.touched"
+      />
+    </div>
+    <p class="help is-danger" *ngIf="userForm.get('username')?.invalid && userForm.get('username')?.touched">
+      El nombre de usuario es requerido.
+    </p>
+  </div>
+
+  <div class="field">
+    <label class="label" for="email">Email</label>
+    <div class="control">
+      <input
+        class="input"
+        type="email"
+        id="email"
+        formControlName="email"
+        required
+        [class.is-danger]="userForm.get('email')?.invalid && userForm.get('email')?.touched"
+      />
+    </div>
+    <p class="help is-danger" *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched">
+      Ingresa un email válido.
+    </p>
+  </div>
+
+  <div class="field">
+    <label class="label" for="firstName">Nombre</label>
+    <div class="control">
+      <input
+        class="input"
+        type="text"
+        id="firstName"
+        formControlName="firstName"
+        required
+        [class.is-danger]="userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched"
+      />
+    </div>
+    <p class="help is-danger" *ngIf="userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched">
+      El nombre es requerido.
+    </p>
+  </div>
+
+  <div class="field">
+    <label class="label" for="lastName">Apellido</label>
+    <div class="control">
+      <input
+        class="input"
+        type="text"
+        id="lastName"
+        formControlName="lastName"
+        required
+        [class.is-danger]="userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched"
+      />
+    </div>
+    <p class="help is-danger" *ngIf="userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched">
+      El apellido es requerido.
+    </p>
+  </div>
+
+  <div class="field">
+    <label class="label" for="roles">Roles</label>
+    <div class="control">
+      <div class="select is-multiple">
+        <select
+          id="roles"
+          formControlName="roles"
+          multiple
+          size="2"
+        >
+          <option *ngFor="let role of roleOptions" [value]="role.value">{{ role.label }}</option>
+        </select>
+      </div>
+      <p class="help">Ctrl/Cmd + click para seleccionar múltiples</p>
+    </div>
+    <p class="help is-danger" *ngIf="userForm.get('roles')?.invalid && userForm.get('roles')?.touched">
+      Selecciona al menos un rol.
+    </p>
+  </div>
+
+  <div class="field">
+    <label class="label" for="tenantId">Tenant ID</label>
+    <div class="control">
+      <div class="select">
+        <select id="tenantId" formControlName="tenantId" required>
+          <option [ngValue]="null">Selecciona un tenant</option>
+          <option *ngFor="let tenant of tenantOptions" [value]="tenant.value">{{ tenant.label }}</option>
+        </select>
+      </div>
+    </div>
+    <p class="help is-danger" *ngIf="userForm.get('tenantId')?.invalid && userForm.get('tenantId')?.touched">
+      El tenant es requerido.
+    </p>
+  </div>
+
+  <footer class="modal-card-foot">
+    <button class="button is-success" type="submit">{{ isEditMode ? 'Guardar Cambios' : 'Añadir Usuario' }}</button>
+    <button class="button" type="button" (click)="onCancel()">Cancelar</button>
+  </footer>
+</form>

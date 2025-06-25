@@ -7,11 +7,12 @@ import { FetchUsers, SelectUser, UserState } from '../../state/user.state';
 import { User } from '../../shared/models/user.interface';
 import { Observable, Subject, take, takeUntil } from 'rxjs';
 import { AuthState } from '../../state/auth.state';
+import { UserForm } from './user-form/user-form';
 
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, UserForm],
   templateUrl: './users-management.html',
   styleUrl: './users-management.scss'
 })
@@ -30,6 +31,9 @@ export class Users implements OnInit, OnDestroy {
   selectedTenantId: string | null = null;
   currentTenantId: string | null = null;
   isAdmin = false;
+
+
+
   ngOnInit(): void {
 
 
@@ -159,15 +163,15 @@ export class Users implements OnInit, OnDestroy {
     }
   }
 
-  saveUser(): void {
+  saveUser(user: User): void {
     if (this.isEditMode) {
       //llama al método de actualización simulado del servicio
-      this.userService.simulatedUpdateUser(this.currentUserForm);
-      console.log('Users Component: Attempting to update user:', this.currentUserForm);
+      this.userService.simulatedUpdateUser(user);
+      console.log('Users Component: Attempting to update user:', user);
     } else {
       //llama al metodo de adición
-      this.userService.simulatedAddUser(this.currentUserForm);
-      console.log('Users Component: Attempting to add new user:', this.currentUserForm);
+      this.userService.simulatedAddUser(user);
+      console.log('Users Component: Attempting to add new user:', user);
     }
     this.closeEditModal(); //cierra el modal luego de guardar
   }
