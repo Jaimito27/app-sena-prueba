@@ -1,155 +1,127 @@
-<div class="container">
-  <h1 class="title">Gestión de Documentos</h1>
+<div class="container py-5">
+  <div class="card p-5">
+    <h1 class="title is-3 mb-4">Gestión de Documentos</h1>
 
-  <div class="field">
-    <label class="label">Buscar documentos:</label>
-    <div class="control">
-      <input class="input" type="text" placeholder="Buscar por nombre, tipo o tag..." [(ngModel)]="searchQuery"
-        (input)="applySearchFilter()">
+    <div class="field mb-5">
+      <label class="label has-text-weight-semibold mb-1">Buscar documentos:</label>
+      <div class="control has-icons-left">
+        <input class="input is-rounded" type="text" placeholder="Buscar por nombre, tipo o tag..." [(ngModel)]="searchQuery"
+          (input)="applySearchFilter()">
+        <span class="icon is-left">
+          <i class="fas fa-search"></i>
+        </span>
+      </div>
     </div>
-  </div>
-  @if (isAdmin$ | async) {
-  <div class="buttons">
-    <button class="button is-success" (click)="openAddDocumentModal()">Añadir Nuevo Documento</button>
-  </div>
-  }
-  <div *ngIf="isLoading$ | async" class="notification is-info">
-    Cargando documentos...
-  </div>
 
-  <div *ngIf="documentsError$ | async as error" class="notification is-danger">
-    <strong>Error:</strong> {{ error }}
-  </div>
-
-  <table class="table is-fullwidth is-striped is-hoverable">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Tipo</th>
-        <th>Tamaño (bytes)</th>
-        <th>Fecha Subida</th>
-        <th>Tenant ID</th>
-        <th>Tags</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let document of filteredAndSearchedDocuments">
-        <td>{{ document.id }}</td>
-        <td>{{ document.name }}</td>
-        <td>{{ document.type }}</td>
-        <td>{{ document.size }}</td>
-        <td>{{ document.uploadDate }}</td>
-        <td>{{ document.tenantId }}</td>
-        <td>
-          <span class="tag is-light mr-1" *ngFor="let tag of document.tags">{{ tag }}</span>
-        </td>
-        <td>
-          <button class="button is-small is-info mr-2" (click)="viewDetails(document)">Ver Detalles</button>
-          @if(canEditOrDelete(document)){
-          <button class="button is-small is-warning mr-2" (click)="onEditDocument(document)">Editar</button>
-          <button class="button is-small is-danger" (click)="onDeleteDocument(document.id)">Eliminar</button>
-          }
-        </td>
-      </tr>
-      <tr *ngIf="filteredAndSearchedDocuments.length === 0 && !(isLoading$ | async)">
-        <td colspan="8" class="has-text-centered">No hay documentos para mostrar con los filtros actuales.</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div class="modal" [ngClass]="{'is-active': (selectedDocument$ | async)}">
-    <div class="modal-background"></div>
-    <div class="modal-card">
-      <header class="modal-card-head">
-        <p class="modal-card-title">Detalles del Documento</p>
-        <button class="delete" aria-label="close" (click)="closeDetailsModal()"></button>
-      </header>
-      <section class="modal-card-body">
-        <div *ngIf="selectedDocument$ | async as doc">
-          <p><strong>ID:</strong> {{ doc.id }}</p>
-          <p><strong>Nombre:</strong> {{ doc.name }}</p>
-          <p><strong>Tipo:</strong> {{ doc.type }}</p>
-          <p><strong>Tamaño:</strong> {{ doc.size }} bytes</p>
-          <p><strong>Fecha Subida:</strong> {{ doc.uploadDate }}</p>
-          <p><strong>Subido por User ID:</strong> {{ doc.userId }}</p>
-          <p><strong>Tenant ID:</strong> {{ doc.tenantId }}</p>
-          <p><strong>Tags:</strong> <span class="tag is-light mr-1" *ngFor="let tag of doc.tags">{{ tag }}</span></p>
-        </div>
-      </section>
-      <footer class="modal-card-foot">
-        <button class="button" (click)="closeDetailsModal()">Cerrar</button>
-      </footer>
+    <div *ngIf="isAdmin$ | async" class="mb-4">
+      <button class="button is-primary is-rounded" (click)="openAddDocumentModal()">
+        <span class="icon"><i class="fas fa-plus"></i></span>
+        <span>Añadir Nuevo Documento</span>
+      </button>
     </div>
-  </div>
 
-  <div class="modal" [ngClass]="{'is-active': isDocumentFormModalActive}">
-    <div class="modal-background"></div>
-    <div class="modal-card">
+    <div *ngIf="isLoading$ | async" class="notification is-info is-light mb-4">
+      <span class="icon mr-2"><i class="fas fa-spinner fa-spin"></i></span>
+      Cargando documentos...
+    </div>
 
-      <header class="modal-card-head">
-        <p class="modal-card-title">{{ isEditMode ? 'Editar Documento' : 'Añadir Nuevo Documento' }}</p>
-        <button class="delete" aria-label="close" (click)="closeDocumentFormModal()"></button>
-      </header>
-      <!-- <section class="modal-card-body">
-        <form (ngSubmit)="saveDocument()">
-          <div class="field">
-            <label class="label" for="docName">Nombre</label>
-            <div class="control">
-              <input class="input" type="text" id="docName" name="docName" [(ngModel)]="currentDocumentForm.name"
-                required>
-            </div>
+    <div *ngIf="documentsError$ | async as error" class="notification is-danger is-light mb-4">
+      <span class="icon mr-2"><i class="fas fa-triangle-exclamation"></i></span>
+      <strong>Error:</strong> {{ error }}
+    </div>
+
+    <div class="table-container mb-5">
+      <table class="table is-fullwidth is-striped is-hoverable is-bordered has-text-small">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Tipo</th>
+            <th>Tamaño (bytes)</th>
+            <th>Fecha Subida</th>
+            <th>Tenant ID</th>
+            <th>Tags</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let document of filteredAndSearchedDocuments">
+            <td>{{ document.id }}</td>
+            <td>{{ document.name }}</td>
+            <td>
+              <span class="tag is-rounded is-light">{{ document.type }}</span>
+            </td>
+            <td>{{ document.size }}</td>
+            <td>{{ document.uploadDate }}</td>
+            <td>{{ document.tenantId }}</td>
+            <td>
+              <span
+                class="tag is-light is-rounded tag-contrast mr-1 mb-1"
+                *ngFor="let tag of document.tags">{{ tag }}</span>
+            </td>
+            <td>
+              <div class="buttons are-small">
+                <button class="button is-info" (click)="viewDetails(document)">
+                  <span class="icon"><i class="fas fa-eye"></i></span>
+                </button>
+                <button *ngIf="canEditOrDelete(document)" class="button is-warning" (click)="onEditDocument(document)">
+                  <span class="icon"><i class="fas fa-edit"></i></span>
+                </button>
+                <button *ngIf="canEditOrDelete(document)" class="button is-danger" (click)="onDeleteDocument(document.id)">
+                  <span class="icon"><i class="fas fa-trash"></i></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="filteredAndSearchedDocuments.length === 0 && !(isLoading$ | async)">
+            <td colspan="8" class="has-text-centered has-text-grey">No hay documentos para mostrar con los filtros actuales.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Detalles Modal -->
+    <div class="modal" [ngClass]="{'is-active': (selectedDocument$ | async)}">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Detalles del Documento</p>
+          <button class="delete" aria-label="close" (click)="closeDetailsModal()"></button>
+        </header>
+        <section class="modal-card-body">
+          <div *ngIf="selectedDocument$ | async as doc">
+            <p><strong>ID:</strong> {{ doc.id }}</p>
+            <p><strong>Nombre:</strong> {{ doc.name }}</p>
+            <p><strong>Tipo:</strong> {{ doc.type }}</p>
+            <p><strong>Tamaño:</strong> {{ doc.size }} bytes</p>
+            <p><strong>Fecha Subida:</strong> {{ doc.uploadDate }}</p>
+            <p><strong>Subido por User ID:</strong> {{ doc.userId }}</p>
+            <p><strong>Tenant ID:</strong> {{ doc.tenantId }}</p>
+            <p>
+              <strong>Tags:</strong>
+              <span class="tag is-light is-rounded tag-contrast mr-1 mb-1" *ngFor="let tag of doc.tags">{{ tag }}</span>
+            </p>
           </div>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button" (click)="closeDetailsModal()">Cerrar</button>
+        </footer>
+      </div>
+    </div>
 
-          <div class="field">
-            <label class="label" for="docType">Tipo</label>
-            <div class="control">
-              <input class="input" type="text" id="docType" name="docType" [(ngModel)]="currentDocumentForm.type"
-                required>
-            </div>
-          </div>
-
-          <div class="field">
-            <label class="label" for="docSize">Tamaño (bytes)</label>
-            <div class="control">
-              <input class="input" type="number" id="docSize" name="docSize" [(ngModel)]="currentDocumentForm.size"
-                required>
-            </div>
-          </div>
-
-          <div class="field">
-            <label class="label" for="docUploadDate">Fecha Subida</label>
-            <div class="control">
-              <input class="input" type="date" id="docUploadDate" name="docUploadDate"
-                [(ngModel)]="currentDocumentForm.uploadDate" required>
-            </div>
-          </div>
-
-          <div class="field">
-            <label class="label" for="docTags">Tags (separados por coma)</label>
-            <div class="control">
-              <input class="input" type="text" id="docTags" name="docTags"
-                [ngModel]="currentDocumentForm.tags.join(', ')" (ngModelChange)="updateTags($event)"
-                placeholder="ej: contrato, legal, finanzas">
-            </div>
-          </div>
-
-          <p class="help">Tenant ID: {{ currentDocumentForm.tenantId }}</p>
-          <p class="help">User ID: {{ currentDocumentForm.userId }}</p>
-
-        </form>
-      </section>
-      <footer class="modal-card-foot">
-        <button class="button is-success" (click)="saveDocument()">{{ isEditMode ? 'Guardar Cambios' : 'Añadir
-          Documento' }}</button>
-        <button class="button" (click)="closeDocumentFormModal()">Cancelar</button>
-      </footer> -->
-
-      <section class="modal-card-body">
-        <app-documents-form [document]="currentDocumentForm" [isEditMode]="isEditMode" (save)="onSaveDocument($event)"
-          (cancel)="closeDocumentFormModal()"></app-documents-form>
-      </section>
+    <!-- Formulario Modal -->
+    <div class="modal" [ngClass]="{'is-active': isDocumentFormModalActive}">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">{{ isEditMode ? 'Editar Documento' : 'Añadir Nuevo Documento' }}</p>
+          <button class="delete" aria-label="close" (click)="closeDocumentFormModal()"></button>
+        </header>
+        <section class="modal-card-body">
+          <app-documents-form [document]="currentDocumentForm" [isEditMode]="isEditMode" (save)="onSaveDocument($event)"
+            (cancel)="closeDocumentFormModal()"></app-documents-form>
+        </section>
+      </div>
     </div>
   </div>
 </div>

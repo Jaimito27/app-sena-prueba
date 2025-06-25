@@ -58,7 +58,7 @@ input, select, textarea {
     background: $primary !important;
     color: $text-main !important;
     &:hover, &:focus {
-      background: lighten($primary, 8%) !important;
+      background: adjust-color($primary, $lightness: 8%) !important;
       color: $secondary !important;
     }
   }
