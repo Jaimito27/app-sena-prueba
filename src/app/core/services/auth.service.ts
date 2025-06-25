@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { Login as LoginAction, SetUser, ForgotPassword as ForgotPasswordAction, Logout } from '../../state/auth.state';
+import { Login as LoginAction, SetUser, ForgotPassword as ForgotPasswordAction, Logout, AuthState } from '../../state/auth.state';
 import { User } from '../../shared/models/user.interface';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { Observable, of, throwError } from 'rxjs';
@@ -35,7 +35,7 @@ export class AuthService {
           const simulatedToken = `fake-jwt-token-${user.id}-${Date.now()}`;
 
           //el token exoira en 30 minutos
-          const expiresAt=Date.now() +30 *60*1000; //30 miunutos
+          const expiresAt = Date.now() + 30 * 60 * 1000; //30 miunutos
           //despacha con expiresAt
           this.store.dispatch(new SetUser(simulatedUser, simulatedToken, expiresAt));
           return { token: simulatedToken, user: simulatedUser };
@@ -106,8 +106,8 @@ export class AuthService {
           tenantId: (Math.floor(Math.random() * 2) + 1).toString(), //asignar un tenant id aleatorio
         };
         const simulatedToken = `fake-jwt-token-new-<span class="math-inline">\{newUser\.id\}\-</span>{Date.now()}`;
-//el token exoira en 30 minutos
-          const expiresAt=Date.now() +30 *60*1000; //30 miunutos
+        //el token exoira en 30 minutos
+        const expiresAt = Date.now() + 30 * 60 * 1000; //30 miunutos
 
 
         this.store.dispatch(new SetUser(simulatedUser, simulatedToken, expiresAt));
@@ -122,5 +122,17 @@ export class AuthService {
   //cerrar sesión
   logout(): void {
     this.store.dispatch(new Logout());
+  }
+
+  //simulación renovación de token
+  renewToken(currentToken: string) {
+    const user = this.store.selectSnapshot(AuthState.currentUser);
+    if (!user) {
+      throw new Error('Usuario no autenticado');
+    }
+    return of({
+      token: `fake-jwt-token-${user.id}-${Date.now()}`,
+      expiresAt: Date.now() + 30 * 60 * 1000, // 30 mins más
+    })
   }
 }

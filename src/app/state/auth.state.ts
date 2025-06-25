@@ -59,9 +59,14 @@ export class AuthState {
   }
 
   @Selector()
+  static expiresAt(state: AuthStateModel): number | null {
+    return state.expiresAt;
+  }
+
+  @Selector()
   static isAuthenticated(state: AuthStateModel): boolean {
-    if(!state.token || !state.user) return false;
-    if(!state.expiresAt) return false;
+    if (!state.token || !state.user) return false;
+    if (!state.expiresAt) return false;
     return state.expiresAt > Date.now()
   }
 
@@ -75,7 +80,7 @@ export class AuthState {
     return state.user?.roles?.includes('admin') || false;
   }
 
-   @Selector()
+  @Selector()
   static isUser(state: AuthStateModel): boolean {
     return state.user?.roles?.includes('user') || false;
   }
