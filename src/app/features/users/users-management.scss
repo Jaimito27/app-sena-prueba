@@ -1,2 +1,170 @@
 @use '../../../styles.scss' as *;
 
+:host {
+  display: block;
+  min-height: 100vh;
+  background: transparent;
+}
+
+// Título
+.title {
+  color: $secondary !important;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 2rem;
+}
+
+// Filtros y campos
+.field {
+  margin-bottom: 1.2rem;
+}
+
+.label {
+  color: $secondary !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.2rem;
+}
+
+.select select {
+  background: lighten($card-bg, 5%) !important;
+  color: $text-main !important;
+  border-radius: 7px;
+  border: 1.5px solid $primary !important;
+  font-size: 1em !important;
+  &:focus {
+    border-color: $secondary !important;
+    box-shadow: 0 0 0 2px rgba($secondary,0.12) !important;
+    background: lighten($card-bg, 10%) !important;
+  }
+}
+
+// Botones con colores personalizados y contraste claro
+.button.is-primary {
+  background: #2c4a9e !important;
+  color: #fffbe7 !important;
+  &:hover, &:focus {
+    background: #4267b2 !important;
+    color: #ff7f50 !important;
+  }
+}
+.button.is-success {
+  background: #ffb672 !important;
+  color: #23253a !important;
+  &:hover, &:focus {
+    background: #ff7f50 !important;
+    color: #fff !important;
+  }
+}
+.button.is-info {
+  background: #38b6ff !important;
+  color: #23253a !important;
+  &:hover, &:focus {
+    background: #2274d4 !important;
+    color: #fffbe7 !important;
+  }
+}
+.button.is-warning {
+  background: #ffe066 !important;
+  color: #23253a !important;
+  &:hover, &:focus {
+    background: #ffd23f !important;
+    color: #d72638 !important;
+  }
+}
+.button.is-danger {
+  background: #e63946 !important;
+  color: #fff !important;
+  &:hover, &:focus {
+    background: #a4161a !important;
+    color: #ffe066 !important;
+  }
+}
+.button.is-small {
+  padding: 0.18em 0.85em !important;
+  font-size: 0.96em !important;
+  border-radius: 7px !important;
+}
+
+// Tabla profesional
+.table {
+  background: none !important;
+  th {
+    background: $primary !important;
+    color: $text-main !important;
+    border: none !important;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.2px;
+    text-align: left;
+  }
+  td {
+    background: none !important;
+    color: $text-main !important;
+    border-color: $card-bg !important;
+    vertical-align: middle !important;
+    font-size: 0.98em;
+  }
+  tr {
+    transition: background 0.14s;
+  }
+  tbody tr:hover {
+    background: lighten($card-bg, 7%) !important;
+    color: $text-main !important;
+  }
+  .has-text-centered { text-align: center !important; }
+}
+
+// Tags para roles
+.tag.is-light {
+  background: #fff !important;
+  color: #23253a !important;
+  border: 1.2px solid $text-main !important;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: capitalize;
+  box-shadow: 0 1px 6px 0 rgba(66, 103, 178, 0.05);
+  opacity: 0.96;
+  margin-bottom: 2px;
+  font-size: 0.96em;
+}
+
+// Notificaciones
+.notification.is-info {
+  background: lighten($primary, 40%) !important;
+  color: $primary !important;
+  border: none !important;
+}
+.notification.is-danger {
+  background: $tertiary !important;
+  color: #fff !important;
+  border: none !important;
+  font-weight: 600;
+}
+
+// Modales
+.modal-card {
+  background: $card-bg !important;
+  color: $text-main !important;
+  border-radius: 1rem;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+}
+.modal-card-title {
+  color: $secondary !important;
+  font-weight: 700;
+}
+.modal-card-head, .modal-card-foot {
+  background: $card-bg;
+  border: none;
+}
+
+// Responsive
+@media (max-width: 900px) {
+  .table {
+    font-size: 0.94em;
+  }
+  .title {
+    font-size: 1.4rem;
+    margin-bottom: 1.2rem;
+  }
+}
