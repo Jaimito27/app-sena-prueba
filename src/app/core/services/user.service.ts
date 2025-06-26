@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Store, UpdateState } from '@ngxs/store';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { User } from '../../shared/models/user.interface';
-import { FetchUsers, FetchUsersSuccess, FetchUsersFailure, AddUser, DeleteUser } from '../../state/user.state';
+import { FetchUsers, FetchUsersSuccess, FetchUsersFailure, AddUser, DeleteUser, UpdateUser } from '../../state/user.state';
 
 @Injectable({
   providedIn: 'root'
@@ -43,7 +43,7 @@ export class UserService {
   }
 
   simulatedUpdateUser(user: User): void {
-    this.store.dispatch(new UpdateState(user));
+    this.store.dispatch(new UpdateUser(user));
   }
 
   simulatedDeleteUser(userId: number): void {

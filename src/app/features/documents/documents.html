@@ -6,7 +6,8 @@
       <label class="label has-text-weight-semibold mb-1">Buscar documentos:</label>
       <div class="control has-icons-left">
         <input class="input is-rounded" type="text" placeholder="Buscar por nombre, tipo o tag..." [(ngModel)]="searchQuery"
-          (input)="applySearchFilter()">
+           [value]="(searchQuery$ | async) || ''"
+  (input)="onSearchInput($event)" >
         <span class="icon is-left">
           <i class="fas fa-search"></i>
         </span>
@@ -45,7 +46,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let document of filteredAndSearchedDocuments">
+          <tr *ngFor="let document of (filteredAndSearchedDocuments$ | async)">
             <td>{{ document.id }}</td>
             <td>{{ document.name }}</td>
             <td>
@@ -73,7 +74,7 @@
               </div>
             </td>
           </tr>
-          <tr *ngIf="filteredAndSearchedDocuments.length === 0 && !(isLoading$ | async)">
+          <tr *ngIf="(filteredAndSearchedDocuments$ | async)?.length === 0 && !(isLoading$ | async)">
             <td colspan="8" class="has-text-centered has-text-grey">No hay documentos para mostrar con los filtros actuales.</td>
           </tr>
         </tbody>

@@ -3,7 +3,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { DocumentService } from '../../core/services/document.service';
-import { combineLatest, debounceTime, filter, map, Observable, startWith, Subject, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, debounceTime, filter, map, Observable, startWith, Subject, takeUntil, tap } from 'rxjs';
 import { Document } from '../../shared/models/document.interface';
 import { DocumentsState, LoadDocuments, SelectDocument } from '../../state/document.state';
 import { AuthState } from '../../state/auth.state';
@@ -24,19 +24,21 @@ export class Documents implements OnInit, OnDestroy {
   isLoading$!: Observable<boolean>;
   documentsError$!: Observable<string | null>;
   selectedDocument$!: Observable<Document | null>;
-
+  searchQuery$ = new  BehaviorSubject<string>('');
   // variables para el formulario de edicion y creación
   isDocumentFormModalActive: boolean = false;
   isEditMode: boolean = false;
   currentDocumentForm: Document = this.resetDocumentForm();
+ filteredAndSearchedDocuments$!: Observable<Document[]>;
+  isAuthenticated$!: Observable<boolean>;
+  isAdmin$!: Observable<boolean>;
 
-   isAuthenticated$!: Observable<boolean>;
-   isAdmin$!: Observable<boolean>;
+
 
   //variable para filtro y busqueda
   searchQuery: string = '';
   //se calculara a partir de este obsevable combinado
-  filteredAndSearchedDocuments: Document[] = [];
+
 
   private allDocumentsForCurrentTenant: Document[] = []; //almacena todos los docs del tenant para aplicar la busqueda
 
@@ -64,40 +66,24 @@ export class Documents implements OnInit, OnDestroy {
     ).subscribe();
 
     //combinar el stream de documentos del estados con el stream de la busqueda
-    combineLatest([
-      this.store.select(DocumentsState.allDocuments), //obtiene todos los docs del estado
-      this.store.select(DocumentsState.filterTenantId).pipe(
-        startWith(this.store.selectSnapshot(DocumentsState.filterTenantId)), //asegrar que el valor inicial se propague
-        filter(tenantId => tenantId !== undefined)//filtrar undefined si lo ubiera
-      ),
-      this.store.select(AuthState.userTenantId).pipe(
-        filter(userTenantId => userTenantId !== null)
-      )
+      this.filteredAndSearchedDocuments$ = combineLatest([
+      this.store.select(DocumentsState.allDocuments),
+      this.store.select(AuthState.userTenantId),
+      this.searchQuery$.asObservable()
     ]).pipe(
-      debounceTime(50), //evita calculos excesivos
-      takeUntil(this.destroy$),
-      map(([allDocs, stateFilterTenantId, userTenantId]) => {
-        //primero se filtra por el tenant que está establecido en el estado (deberia ser el del usuari)
+      map(([allDocs, userTenantId, searchQuery]) => {
+        // Filtra por tenantId primero
         const tenantFilteredDocs = allDocs.filter(doc => doc.tenantId === userTenantId);
-        this.allDocumentsForCurrentTenant = tenantFilteredDocs; //guarda la lista para busqueda local
-
-
-        //luego aplicar la busqueda local
-        const query = this.searchQuery.toLowerCase().trim();
-        if (!query) {
-          return tenantFilteredDocs;
-        } else {
-          return tenantFilteredDocs.filter(doc =>
-            doc.name.toLowerCase().includes(query) ||
-            doc.type.toLowerCase().includes(query) ||
-            doc.tags.some(tag => tag.toLowerCase().includes(query))
-          );
-        }
+        // Aplica el filtro de búsqueda
+        const query = searchQuery.toLowerCase().trim();
+        if (!query) return tenantFilteredDocs;
+        return tenantFilteredDocs.filter(doc =>
+          doc.name.toLowerCase().includes(query) ||
+          doc.type.toLowerCase().includes(query) ||
+          (doc.tags || []).some(tag => tag.toLowerCase().includes(query))
+        );
       })
-    ).subscribe(finalDocs => {
-      this.filteredAndSearchedDocuments = finalDocs;
-      console.log('Documents updated after filter/search:', this.filteredAndSearchedDocuments);
-    });
+    );
   }
 
   //metodos para el formulario del CRUD
@@ -172,13 +158,9 @@ export class Documents implements OnInit, OnDestroy {
   }
 
 
-
-  applySearchFilter(): void {
-    // No hace falta implementar lógica aquí, el combineLatest ya se suscribe
-    // a los cambios de `this.searchQuery` a través del stream que le añadimos.
-    // Solo si el debounceTime es demasiado largo y necesitas una actualización instantánea,
-    // podrías forzar una reevaluación, pero con debounceTime(300) y el stream de searchQuery
-    // en combineLatest, debería ser suficiente.
+  onSearchInput(event: Event) {
+    const value = (event.target as HTMLInputElement)?.value ?? '';
+    this.searchQuery$.next(value);
   }
   // En src/app/features/documents/document-list/document-list.component.ts
   // (o documents.ts si no lo renombraste)
@@ -187,9 +169,9 @@ export class Documents implements OnInit, OnDestroy {
   }
 
   canEditOrDelete(document: Document): boolean {
-  const isAdmin = this.store.selectSnapshot(AuthState.isAdmin); // síncrono
-  const currentTenantId = this.store.selectSnapshot(AuthState.userTenantId); // síncrono
-  return isAdmin || document.tenantId === currentTenantId;
-}
+    const isAdmin = this.store.selectSnapshot(AuthState.isAdmin); // síncrono
+    const currentTenantId = this.store.selectSnapshot(AuthState.userTenantId); // síncrono
+    return isAdmin || document.tenantId === currentTenantId;
+  }
 
 }
