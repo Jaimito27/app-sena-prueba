@@ -1,1 +1,97 @@
-<p>dashboard works!</p>
+<div class="container py-5">
+  <div class="dashboard-header mb-5">
+    <h1 class="title is-2 mb-1">Dashboard General</h1>
+    <p class="subtitle is-5 has-text-grey-light">Bienvenido, revisa el estado general de la plataforma.</p>
+  </div>
+  <div class="columns is-multiline mb-4">
+    <div class="column is-one-third">
+      <div class="card dashboard-card">
+        <div class="card-content">
+          <div class="is-flex is-align-items-center">
+            <div class="dashboard-icon has-background-primary mr-4">
+              <span class="icon is-large has-text-white">
+                <i class="fas fa-users fa-2x"></i>
+              </span>
+            </div>
+            <div>
+              <p class="dashboard-label">Usuarios Activos</p>
+              <h2 class="dashboard-metric">1,244</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="column is-one-third">
+      <div class="card dashboard-card">
+        <div class="card-content">
+          <div class="is-flex is-align-items-center">
+            <div class="dashboard-icon has-background-secondary mr-4">
+              <span class="icon is-large has-text-black">
+                <i class="fas fa-file-alt fa-2x"></i>
+              </span>
+            </div>
+            <div>
+              <p class="dashboard-label">Documentos</p>
+              <h2 class="dashboard-metric">352</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="column is-one-third">
+      <div class="card dashboard-card">
+        <div class="card-content">
+          <div class="is-flex is-align-items-center">
+            <div class="dashboard-icon has-background-tertiary mr-4">
+              <span class="icon is-large has-text-white">
+                <i class="fas fa-exclamation-triangle fa-2x"></i>
+              </span>
+            </div>
+            <div>
+              <p class="dashboard-label">Alertas</p>
+              <h2 class="dashboard-metric">3</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="columns mt-4">
+    <div class="column is-two-thirds">
+      <div class="card dashboard-card">
+        <div class="card-content">
+          <h3 class="title is-5 mb-3">Actividad Reciente</h3>
+          <ul class="dashboard-activity">
+            <li>
+              <span class="dashboard-activity-dot has-background-primary"></span>
+              Nuevo usuario registrado: <strong>maria.gomez</strong> <span class="dashboard-activity-time">hace 5 min</span>
+            </li>
+            <li>
+              <span class="dashboard-activity-dot has-background-secondary"></span>
+              Documento <strong>Contrato2025.pdf</strong> subido <span class="dashboard-activity-time">hace 30 min</span>
+            </li>
+            <li>
+              <span class="dashboard-activity-dot has-background-tertiary"></span>
+              <strong>Alerta</strong>: Acceso no autorizado bloqueado <span class="dashboard-activity-time">hace 1 hora</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="column">
+      <div class="card dashboard-card">
+        <div class="card-content">
+          <h3 class="title is-5 mb-3">Estado del Sistema</h3>
+          <div class="mb-2">
+            <span class="tag is-success is-light dashboard-status-tag">API: OK</span>
+            <span class="tag is-success is-light dashboard-status-tag">DB: OK</span>
+            <span class="tag is-warning is-light dashboard-status-tag">Email: Retrasos</span>
+          </div>
+          <div class="mt-4">
+            <button class="button is-primary is-fullwidth is-rounded">Ver Reporte Completo</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

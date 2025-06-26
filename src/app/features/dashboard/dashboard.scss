@@ -1,0 +1,147 @@
+@use '../../../styles.scss' as *;
+
+// -------------------------------------
+// Dashboard Profesional con tu paleta
+// -------------------------------------
+
+$primary:   #4267b2;
+$secondary: #ff7f50;
+$tertiary:  #d72638;
+$background: #181927;
+$card-bg:   #23253a;
+$text-main: #e4eaf7;
+$text-muted: #b5b8c5;
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background: $background;
+  color: $text-main;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+}
+
+.dashboard-header {
+  .title {
+    color: $secondary !important;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+  }
+  .subtitle {
+    color: $text-muted !important;
+    font-weight: 500;
+    margin-top: -0.5em;
+  }
+}
+
+.dashboard-card {
+  background: $card-bg !important;
+  border-radius: 1.3rem !important;
+  box-shadow: 0 6px 32px rgba(0,0,0,0.18) !important;
+  border: 1.5px solid lighten($card-bg, 5%) !important;
+  color: $text-main !important;
+  min-height: 124px;
+  transition: box-shadow 0.25s;
+  &:hover {
+    box-shadow: 0 10px 36px rgba($primary,0.12), 0 2px 8px rgba(0,0,0,0.13) !important;
+  }
+}
+
+.dashboard-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  &.has-background-primary { background: $primary !important; }
+  &.has-background-secondary { background: $secondary !important; }
+  &.has-background-tertiary { background: $tertiary !important; }
+  .icon {
+    font-size: 1rem !important;
+  }
+}
+
+.dashboard-label {
+  color: $text-muted;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.dashboard-metric {
+  color: $text-main;
+  font-size: 2.1rem;
+  font-weight: 800;
+  margin-top: 0.2rem;
+  letter-spacing: 0.03em;
+}
+
+// Actividad
+.dashboard-activity {
+  list-style: none;
+  margin: 0; padding: 0;
+  li {
+    position: relative;
+    padding-left: 2.1em;
+    margin-bottom: 1.1em;
+    font-size: 1.03em;
+    color: $text-main;
+    strong { color: $secondary; }
+    .dashboard-activity-time {
+      color: $text-muted;
+      font-size: 0.95em;
+      margin-left: 0.7em;
+    }
+    .dashboard-activity-dot {
+      position: absolute;
+      left: 0; top: 0.45em;
+      width: 1.2em; height: 1.2em;
+      border-radius: 50%;
+      display: inline-block;
+      border: 2.5px solid $background;
+      &.has-background-primary { background: $primary; }
+      &.has-background-secondary { background: $secondary; }
+      &.has-background-tertiary { background: $tertiary; }
+    }
+  }
+}
+
+// Estado del sistema
+.dashboard-status-tag {
+  margin-right: 0.5em;
+  margin-bottom: 0.4em;
+  font-size: 1em;
+  font-weight: 700;
+  border-radius: 7px;
+  padding: 0.5em 1.1em;
+  letter-spacing: 0.03em;
+}
+.tag.is-success.is-light {
+  background: lighten($primary, 25%) !important;
+  color: $primary !important;
+}
+.tag.is-warning.is-light {
+  background: lighten($secondary, 30%) !important;
+  color: $secondary !important;
+}
+
+// Botón principal
+.button.is-primary {
+  background: #2c4a9e !important;
+  color: #fffbe7 !important;
+  font-weight: 800 !important;
+  border-radius: 8px !important;
+  letter-spacing: 0.04em;
+  border: none !important;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+  box-shadow: 0 1px 8px 0 rgba(66, 103, 178, 0.10);
+  &:hover, &:focus {
+    background: #4267b2 !important;
+    color: #ff7f50 !important;
+    box-shadow: 0 2px 16px 0 rgba(48,96,208,0.16);
+  }
+}
+
+@media (max-width: 900px) {
+  .dashboard-header .title { font-size: 1.5rem; }
+  .dashboard-metric { font-size: 1.25rem; }
+  .dashboard-card { padding: 0.7rem !important; }
+}
