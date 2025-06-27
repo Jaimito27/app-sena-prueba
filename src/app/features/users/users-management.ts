@@ -104,12 +104,6 @@ export class Users implements OnInit, OnDestroy {
     }
   }
 
-  filterUsers(): void {
-    // Al hacer clic en el botón, fuerza la reevaluación del filtro
-    // La suscripción en ngOnInit ya maneja esto, pero esto es más explícito para el botón
-
-    this.applyFilter()
-  }
 
   viewDetails(user: User): void {
     this.store.dispatch(new SelectUser(user));
