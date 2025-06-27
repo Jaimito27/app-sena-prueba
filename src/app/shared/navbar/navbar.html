@@ -1,6 +1,5 @@
 <nav class="navbar custom-navbar" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
-
     <a class="navbar-item custom-navbar-title">
       <span class="icon-text">
         <span class="icon">
@@ -24,14 +23,14 @@
 
   <div id="navbarBasicExample" class="navbar-menu" [ngClass]="{'is-active': navbarOpen}">
     <div class="navbar-start">
-          <ng-container *ngIf="(isAdmin$ | async) || (isUser$ | async)">
-      <a class="navbar-item"
-         routerLink="/dashboard"
-         routerLinkActive="is-active"
-         [routerLinkActiveOptions]="{ exact: true }">
-        <span class="icon"><i class="fas fa-home"></i></span>
-        <span>Dashboard</span>
-      </a>
+      <ng-container *ngIf="(isAdmin$ | async) || (isUser$ | async)">
+        <a class="navbar-item"
+           routerLink="/dashboard"
+           routerLinkActive="is-active"
+           [routerLinkActiveOptions]="{ exact: true }">
+          <span class="icon"><i class="fas fa-home"></i></span>
+          <span>Dashboard</span>
+        </a>
       </ng-container>
       <ng-container *ngIf="(isAdmin$ | async) || (isUser$ | async)">
         <a class="navbar-item"
@@ -48,37 +47,52 @@
            routerLinkActive="is-active"
            [routerLinkActiveOptions]="{ exact: true }">
           <span class="icon"><i class="fas fa-users-cog"></i></span>
-          <span>Gestión de Usuarios</span>
+          <span>Usuarios</span>
         </a>
       </ng-container>
     </div>
 
     <div class="navbar-end">
       <div class="navbar-item custom-navbar-buttons-container">
-        <div class="buttons">
-          <ng-container *ngIf="(isAuthenticated$ | async); else authButtons">
-            <button class="button is-light custom-navbar-logout" (click)="onLogout()">
-              <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
-              <span>Cerrar Sesión</span>
-            </button>
+        <div class="buttons" *ngIf="(isAuthenticated$ | async)">
+          <ng-container *ngIf="currentUser$ | async as user">
+            <div class="user-dropdown"
+                 [class.is-active]="userMenuOpen"
+                 (mouseenter)="userMenuOpen = true"
+                 (mouseleave)="userMenuOpen = false">
+              <button class="button is-light user-dropdown-trigger"
+                      (click)="userMenuOpen = !userMenuOpen"
+                      type="button">
+                <img [src]="user.image || 'https://ui-avatars.com/api/?name=' + user.firstName + user.lastName"
+                    class="user-avatar" alt="avatar" />
+                <span class="user-name">{{ user.firstName }} {{ user.lastName }}</span>
+                <span class="icon is-small"><i class="fas fa-caret-down"></i></span>
+              </button>
+              <div class="user-dropdown-menu" *ngIf="userMenuOpen">
+                <a class="dropdown-item" (click)="onLogout()">
+                  <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
+                  Cerrar sesión
+                </a>
+              </div>
+            </div>
           </ng-container>
-          <ng-template #authButtons>
-            <a class="button is-primary custom-navbar-register"
-               routerLink="/auth/register"
-               routerLinkActive="is-active"
-               [routerLinkActiveOptions]="{ exact: true }">
-              <span class="icon"><i class="fas fa-user-plus"></i></span>
-              <strong>Registrarse</strong>
-            </a>
-            <a class="button is-light custom-navbar-login"
-               routerLink="/auth/login"
-               routerLinkActive="is-active"
-               [routerLinkActiveOptions]="{ exact: true }">
-              <span class="icon"><i class="fas fa-sign-in-alt"></i></span>
-              <span>Iniciar Sesión</span>
-            </a>
-          </ng-template>
         </div>
+        <ng-container *ngIf="!(isAuthenticated$ | async)">
+          <a class="button is-primary custom-navbar-register"
+             routerLink="/auth/register"
+             routerLinkActive="is-active"
+             [routerLinkActiveOptions]="{ exact: true }">
+            <span class="icon"><i class="fas fa-user-plus"></i></span>
+            <strong>Registrarse</strong>
+          </a>
+          <a class="button is-light custom-navbar-login"
+             routerLink="/auth/login"
+             routerLinkActive="is-active"
+             [routerLinkActiveOptions]="{ exact: true }">
+            <span class="icon"><i class="fas fa-sign-in-alt"></i></span>
+            <span>Iniciar Sesión</span>
+          </a>
+        </ng-container>
       </div>
     </div>
   </div>

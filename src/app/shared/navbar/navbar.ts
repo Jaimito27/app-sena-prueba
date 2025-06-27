@@ -4,6 +4,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 import { AuthState, Logout } from '../../state/auth.state';
 import { Observable } from 'rxjs';
+import { User } from '../models/user.interface';
 
 @Component({
   selector: 'app-navbar',
@@ -20,6 +21,11 @@ export class Navbar implements OnInit {
 
   navbarOpen = false;
 
+  userMenuOpen = false;
+toggleUserMenu() {
+  this.userMenuOpen = !this.userMenuOpen;
+}
+
   toggleNavbar() {
     this.navbarOpen = !this.navbarOpen;
   }
@@ -27,16 +33,18 @@ export class Navbar implements OnInit {
   isAuthenticated$!: Observable<boolean>;
   isAdmin$!: Observable<boolean>;
   isUser$!: Observable<boolean>;
+  currentUser$!: Observable<User | null>
 
   ngOnInit(): void {
     this.isAuthenticated$ = this.store.select(AuthState.isAuthenticated);
     this.isAdmin$ = this.store.select(AuthState.isAdmin);
-    this.isUser$ = this.store.select(AuthState.isUser)
+    this.isUser$ = this.store.select(AuthState.isUser);
+    this.currentUser$ = this.store.select(AuthState.currentUser);
   }
   constructor() { }
 
   onLogout(): void {
     this.store.dispatch(new Logout());
-    this.router.navigate(['/dashboard'])
+    this.router.navigate(['/login'])
   }
 }

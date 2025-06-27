@@ -6,7 +6,6 @@
   box-shadow: 0 3px 18px rgba($primary, 0.14);
   min-height: 4.5rem;
 
-  // Navbar Brand
   .custom-navbar-title {
     display: flex;
     align-items: center;
@@ -23,7 +22,6 @@
     }
   }
 
-  // Navbar Burger
   .navbar-burger {
     color: $primary;
     &:hover {
@@ -86,34 +84,100 @@
       border: 2px solid $secondary;
       box-shadow: 0 2px 8px rgba($secondary, 0.14);
       z-index: 2;
-      // Mantiene activo aunque pase el mouse
       &:hover,
       &:focus {
         background: $background !important;
         color: $secondary !important;
       }
     }
-
     // Hover solo si NO está activo
     &:not(.is-active):hover,
     &:not(.is-active):focus {
       background: $secondary !important;
       color: $background !important;
-      box-shadow: 0 4px 14px rgba($secondary,0.13);
-      border-color: transparent;
     }
 
+    // Conserva los colores originales de Bulma para registrar e iniciar sesión
     &.is-primary,
     &.custom-navbar-register {
-      background: $primary;
-      color: #fff;
+      background: $primary !important;
+      color: #fff !important;
+      &:hover,
+      &:focus {
+        background: darken($primary, 5%) !important;
+        color: #fff !important;
+      }
     }
-
     &.is-light,
-    &.custom-navbar-login,
-    &.custom-navbar-logout {
-      background: lighten($card-bg, 7%);
+    &.custom-navbar-login {
+      background: #fff !important;
+      color: $primary !important;
+      &:hover,
+      &:focus {
+        background: lighten($primary, 35%) !important;
+        color: $primary !important;
+      }
+    }
+  }
+}
+
+// Dropdown de usuario
+.user-dropdown {
+  position: relative;
+  display: inline-block;
+  .user-dropdown-trigger {
+    display: flex;
+    align-items: center;
+    gap: 0.3em; // Menos espacio entre avatar y nombre
+    background: lighten($card-bg, 7%);
+    color: $primary;
+    border-radius: 7px;
+    border: none;
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.3em;
+      border: 2px solid $primary;
+    }
+    .user-name {
+      font-weight: 700;
+      font-size: 1.01em;
+      max-width: 150px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+  .user-dropdown-menu {
+    position: absolute;
+    top: 105%; // Más pegado al botón
+    right: 0;
+    background: $card-bg;
+    border-radius: 10px;
+    box-shadow: 0 4px 18px rgba($primary,0.10);
+    min-width: 180px;
+    z-index: 100;
+    padding: 0.4em 0;
+    .dropdown-item {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 0.6em;
+      padding: 0.8em 1.2em;
+      background: none;
       color: $primary;
+      cursor: pointer;
+      border: none;
+      font-size: 1em;
+      &:hover {
+        background: lighten($primary, 37%);
+        color: $secondary;
+      }
+      .icon {
+        color: inherit;
+      }
     }
   }
 }
