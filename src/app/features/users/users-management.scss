@@ -8,7 +8,7 @@
 
 // Título
 .title {
-  color: $secondary !important;
+  color: var(--secondary) !important;
   font-weight: 700;
   letter-spacing: 0.5px;
   margin-bottom: 2rem;
@@ -20,64 +20,64 @@
 }
 
 .label {
-  color: $secondary !important;
+  color: var(--secondary) !important;
   font-weight: 700 !important;
   letter-spacing: 0.02em;
   margin-bottom: 0.2rem;
 }
 
 .select select {
-  background: lighten($card-bg, 5%) !important;
-  color: $text-main !important;
+  background: var(--input-bg) !important;
+  color: var(--text-main) !important;
   border-radius: 7px;
-  border: 1.5px solid $primary !important;
+  border: 1.5px solid var(--primary) !important;
   font-size: 1em !important;
   &:focus {
-    border-color: $secondary !important;
-    box-shadow: 0 0 0 2px rgba($secondary,0.12) !important;
-    background: lighten($card-bg, 10%) !important;
+    border-color: var(--secondary) !important;
+    box-shadow: 0 0 0 2px var(--secondary-light) !important;
+    background: var(--input-focus) !important;
   }
 }
 
 // Botones con colores personalizados y contraste claro
 .button.is-primary {
-  background: #2c4a9e !important;
-  color: #fffbe7 !important;
+  background: var(--button-primary) !important;
+  color: var(--button-primary-text) !important;
   &:hover, &:focus {
-    background: #4267b2 !important;
-    color: #ff7f50 !important;
+    background: var(--button-primary-hover) !important;
+    color: var(--primary) !important;
   }
 }
 .button.is-success {
-  background: #ffb672 !important;
-  color: #23253a !important;
+  background: var(--button-success) !important;
+  color: var(--button-success-text) !important;
   &:hover, &:focus {
-    background: #ff7f50 !important;
-    color: #fff !important;
+    background: var(--button-success-hover) !important;
+    color: var(--primary) !important;
   }
 }
 .button.is-info {
   background: #38b6ff !important;
-  color: #23253a !important;
+  color: var(--text-main) !important;
   &:hover, &:focus {
     background: #2274d4 !important;
-    color: #fffbe7 !important;
+    color: var(--button-primary) !important;
   }
 }
 .button.is-warning {
   background: #ffe066 !important;
-  color: #23253a !important;
+  color: var(--text-main) !important;
   &:hover, &:focus {
     background: #ffd23f !important;
-    color: #d72638 !important;
+    color: var(--tertiary) !important;
   }
 }
 .button.is-danger {
-  background: #e63946 !important;
-  color: #fff !important;
+  background: var(--button-danger) !important;
+  color: var(--button-danger-text) !important;
   &:hover, &:focus {
-    background: #a4161a !important;
-    color: #ffe066 !important;
+    background: var(--button-danger-hover) !important;
+    color: var(--tertiary) !important;
   }
 }
 .button.is-small {
@@ -90,8 +90,8 @@
 .table {
   background: none !important;
   th {
-    background: $primary !important;
-    color: $text-main !important;
+    background: var(--primary) !important;
+    color: var(--card-bg) !important;
     border: none !important;
     font-weight: 700;
     font-size: 1rem;
@@ -100,8 +100,8 @@
   }
   td {
     background: none !important;
-    color: $text-main !important;
-    border-color: $card-bg !important;
+    color: var(--text-main) !important;
+    border-color: var(--card-bg) !important;
     vertical-align: middle !important;
     font-size: 0.98em;
   }
@@ -109,17 +109,17 @@
     transition: background 0.14s;
   }
   tbody tr:hover {
-    background: lighten($card-bg, 7%) !important;
-    color: $text-main !important;
+    background: var(--primary-light) !important;
+    color: var(--text-main) !important;
   }
   .has-text-centered { text-align: center !important; }
 }
 
 // Tags para roles
 .tag.is-light {
-  background: #fff !important;
-  color: #23253a !important;
-  border: 1.2px solid $text-main !important;
+  background: var(--card-bg) !important;
+  color: var(--text-main) !important;
+  border: 1.2px solid var(--text-main) !important;
   font-weight: 600;
   letter-spacing: 0.02em;
   text-transform: capitalize;
@@ -131,12 +131,12 @@
 
 // Notificaciones
 .notification.is-info {
-  background: lighten($primary, 40%) !important;
-  color: $primary !important;
+  background: var(--primary-light) !important;
+  color: var(--primary) !important;
   border: none !important;
 }
 .notification.is-danger {
-  background: $tertiary !important;
+  background: var(--tertiary) !important;
   color: #fff !important;
   border: none !important;
   font-weight: 600;
@@ -144,17 +144,17 @@
 
 // Modales
 .modal-card {
-  background: $card-bg !important;
-  color: $text-main !important;
+  background: var(--card-bg) !important;
+  color: var(--text-main) !important;
   border-radius: 1rem;
   box-shadow: 0 8px 40px rgba(0,0,0,0.18);
 }
 .modal-card-title {
-  color: $secondary !important;
+  color: var(--secondary) !important;
   font-weight: 700;
 }
 .modal-card-head, .modal-card-foot {
-  background: $card-bg;
+  background: var(--card-bg);
   border: none;
 }
 
@@ -170,6 +170,5 @@
 }
 
 img {
-  width: 40px; /* Ancho fijo de 300 píxeles */
-
+  width: 40px;
 }

@@ -3,45 +3,45 @@
 :host {
   display: block;
   min-height: 100vh;
-  background: transparent; // Deja que el global se aplique
+  background: transparent;
 }
 
 // Card principal
 .card {
-  background: $card-bg !important;
+  background: var(--card-bg) !important;
   border-radius: 18px !important;
   box-shadow: 0 8px 40px rgba(0,0,0,0.18) !important;
-  border: 1.5px solid adjust-color($card-bg, $lightness: 7%) !important;
+  border: 1.5px solid var(--input-focus) !important;
 }
 
 // Título
 .title {
-  color: $secondary !important;
+  color: var(--secondary) !important;
   letter-spacing: 0.5px;
   font-weight: 700;
 }
 
 // Inputs con icono
 .input.is-rounded {
-  background: lighten($card-bg, 5%) !important;
-  color: $text-main !important;
+  background: var(--input-bg) !important;
+  color: var(--text-main) !important;
   border-radius: 7px !important;
-  border: 1.5px solid $primary !important;
-  &::placeholder { color: $text-muted !important; }
+  border: 1.5px solid var(--primary) !important;
+  &::placeholder { color: var(--text-muted) !important; }
   &:focus {
-    border-color: $secondary !important;
-    box-shadow: 0 0 0 2px rgba($secondary,0.12) !important;
-    background: lighten($card-bg, 10%) !important;
-    color: $text-main !important;
+    border-color: var(--secondary) !important;
+    box-shadow: 0 0 0 2px var(--secondary-light) !important;
+    background: var(--input-focus) !important;
+    color: var(--text-main) !important;
   }
 }
 
-// Tabla profesional en dark mode
+// Tabla profesional
 .table {
   background: none !important;
   th {
-    background: $primary !important;
-    color: $text-main !important;
+    background: var(--primary) !important;
+    color: var(--card-bg) !important;
     border: none !important;
     font-weight: 700;
     font-size: 1rem;
@@ -50,8 +50,8 @@
   }
   td {
     background: none !important;
-    color: $text-main !important;
-    border-color: $card-bg !important;
+    color: var(--text-main) !important;
+    border-color: var(--card-bg) !important;
     vertical-align: middle !important;
     font-size: 0.98em;
   }
@@ -59,8 +59,8 @@
     transition: background 0.14s;
   }
   tbody tr:hover {
-    background: lighten($card-bg, 7%) !important;
-    color: $text-main !important;
+    background: var(--primary-light) !important;
+    color: var(--text-main) !important;
   }
   .has-text-centered { text-align: center !important; }
 }
@@ -68,9 +68,9 @@
 // Tags claros y legibles
 .tag-contrast,
 .tag.is-light {
-  background: #fff !important;
-  color: #23253a !important;
-  border: 1.2px solid $text-main !important;
+  background: var(--card-bg) !important;
+  color: var(--text-main) !important;
+  border: 1.2px solid var(--text-main) !important;
   font-weight: 600;
   letter-spacing: 0.02em;
   text-transform: capitalize;
@@ -96,30 +96,30 @@
 
 // Notificaciones
 .notification.is-info {
-  background: lighten($primary, 40%) !important;
-  color: $primary !important;
+  background: var(--primary-light) !important;
+  color: var(--primary) !important;
   border: none !important;
 }
 .notification.is-danger {
-  background: $tertiary !important;
+  background: var(--tertiary) !important;
   color: #fff !important;
   border: none !important;
   font-weight: 600;
 }
 
-// Modales adaptados a dark
+// Modales adaptados
 .modal-card {
-  background: $card-bg !important;
-  color: $text-main !important;
+  background: var(--card-bg) !important;
+  color: var(--text-main) !important;
   border-radius: 1rem;
   box-shadow: 0 8px 40px rgba(0,0,0,0.18);
 }
 .modal-card-title {
-  color: $secondary !important;
+  color: var(--secondary) !important;
   font-weight: 700;
 }
 .modal-card-head, .modal-card-foot {
-  background: $card-bg;
+  background: var(--card-bg);
   border: none;
 }
 

@@ -22,9 +22,9 @@ export class Navbar implements OnInit {
   navbarOpen = false;
 
   userMenuOpen = false;
-toggleUserMenu() {
-  this.userMenuOpen = !this.userMenuOpen;
-}
+  toggleUserMenu() {
+    this.userMenuOpen = !this.userMenuOpen;
+  }
 
   toggleNavbar() {
     this.navbarOpen = !this.navbarOpen;
@@ -40,6 +40,9 @@ toggleUserMenu() {
     this.isAdmin$ = this.store.select(AuthState.isAdmin);
     this.isUser$ = this.store.select(AuthState.isUser);
     this.currentUser$ = this.store.select(AuthState.currentUser);
+
+    const saved = localStorage.getItem('theme');
+    document.documentElement.setAttribute('data-theme', saved || 'light');
   }
   constructor() { }
 
@@ -47,4 +50,13 @@ toggleUserMenu() {
     this.store.dispatch(new Logout());
     this.router.navigate(['/login'])
   }
+
+
+  toggleTheme() {
+    const theme = document.documentElement.getAttribute('data-theme');
+    document.documentElement.setAttribute('data-theme', theme === 'dark' ? 'light' : 'dark');
+    localStorage.setItem('theme', theme === 'dark' ? 'light' : 'dark');
+  }
+
+
 }

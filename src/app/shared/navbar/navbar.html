@@ -77,6 +77,10 @@
             </div>
           </ng-container>
         </div>
+
+        <button class="button" (click)="toggleTheme()">
+  Cambiar tema
+</button>
         <ng-container *ngIf="!(isAuthenticated$ | async)">
           <a class="button is-primary custom-navbar-register"
              routerLink="/auth/register"

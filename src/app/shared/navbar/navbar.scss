@@ -1,56 +1,54 @@
-@use '../../../styles.scss' as *;
-
 .custom-navbar {
-  background: $card-bg;
-  border-bottom: 2.5px solid $primary;
-  box-shadow: 0 3px 18px rgba($primary, 0.14);
+  background: var(--card-bg);
+  border-bottom: 2.5px solid var(--primary);
+  box-shadow: 0 3px 18px rgba(66, 103, 178, 0.14);
   min-height: 4.5rem;
 
   .custom-navbar-title {
     display: flex;
     align-items: center;
     .title {
-      color: $primary;
+      color: var(--primary);
       font-weight: 900;
       letter-spacing: 1.5px;
       margin-left: 0.5em;
-      text-shadow: 0 2px 8px rgba($primary, 0.10);
+      text-shadow: 0 2px 8px rgba(66, 103, 178, 0.10);
     }
     .icon {
-      color: $secondary;
+      color: var(--secondary);
       font-size: 1.3em;
     }
   }
 
   .navbar-burger {
-    color: $primary;
+    color: var(--primary);
     &:hover {
-      color: $secondary;
+      color: var(--secondary);
       background: none;
     }
   }
 
   // Menú izquierdo: solo aquí hover y activo
   > .navbar-menu > .navbar-start > .navbar-item {
-    color: $text-main;
+    color: var(--text-main);
     font-weight: 600;
     transition: background 0.2s, color 0.2s;
     border-radius: 7px;
 
     &:hover {
-      background: $primary;
-      color: $secondary !important;
+      background: var(--primary);
+      color: var(--secondary) !important;
     }
     &.is-active {
-      background: $primary !important;
-      color: $secondary !important;
-      box-shadow: 0 2px 8px rgba($secondary, 0.14);
-      border: 2px solid $secondary;
+      background: var(--primary) !important;
+      color: var(--secondary) !important;
+      box-shadow: 0 2px 8px rgba(255, 127, 80, 0.14);
+      border: 2px solid var(--secondary);
       z-index: 2;
       position: relative;
     }
     .icon {
-      color: $secondary;
+      color: var(--secondary);
       margin-right: 0.4em;
     }
   }
@@ -79,43 +77,43 @@
 
     // Estado activo (ruta actual)
     &.is-active {
-      background: $background !important;
-      color: $secondary !important;
-      border: 2px solid $secondary;
-      box-shadow: 0 2px 8px rgba($secondary, 0.14);
+      background: var(--background) !important;
+      color: var(--secondary) !important;
+      border: 2px solid var(--secondary);
+      box-shadow: 0 2px 8px rgba(255, 127, 80, 0.14);
       z-index: 2;
       &:hover,
       &:focus {
-        background: $background !important;
-        color: $secondary !important;
+        background: var(--background) !important;
+        color: var(--secondary) !important;
       }
     }
     // Hover solo si NO está activo
     &:not(.is-active):hover,
     &:not(.is-active):focus {
-      background: $secondary !important;
-      color: $background !important;
+      background: var(--secondary) !important;
+      color: var(--background) !important;
     }
 
-    // Conserva los colores originales de Bulma para registrar e iniciar sesión
+    // Colores de los botones principales
     &.is-primary,
     &.custom-navbar-register {
-      background: $primary !important;
+      background: var(--primary) !important;
       color: #fff !important;
       &:hover,
       &:focus {
-        background: darken($primary, 5%) !important;
-        color: #fff !important;
+        background: var(--primary-light) !important;
+        color: var(--primary) !important;
       }
     }
     &.is-light,
     &.custom-navbar-login {
       background: #fff !important;
-      color: $primary !important;
+      color: var(--primary) !important;
       &:hover,
       &:focus {
-        background: lighten($primary, 35%) !important;
-        color: $primary !important;
+        background: var(--primary-light) !important;
+        color: var(--primary) !important;
       }
     }
   }
@@ -128,9 +126,9 @@
   .user-dropdown-trigger {
     display: flex;
     align-items: center;
-    gap: 0.3em; // Menos espacio entre avatar y nombre
-    background: lighten($card-bg, 7%);
-    color: $primary;
+    gap: 0.3em;
+    background: var(--primary-light);
+    color: var(--primary);
     border-radius: 7px;
     border: none;
     .user-avatar {
@@ -139,7 +137,7 @@
       border-radius: 50%;
       object-fit: cover;
       margin-right: 0.3em;
-      border: 2px solid $primary;
+      border: 2px solid var(--primary);
     }
     .user-name {
       font-weight: 700;
@@ -152,11 +150,11 @@
   }
   .user-dropdown-menu {
     position: absolute;
-    top: 105%; // Más pegado al botón
+    top: 105%;
     right: 0;
-    background: $card-bg;
+    background: var(--card-bg);
     border-radius: 10px;
-    box-shadow: 0 4px 18px rgba($primary,0.10);
+    box-shadow: 0 4px 18px rgba(66, 103, 178,0.10);
     min-width: 180px;
     z-index: 100;
     padding: 0.4em 0;
@@ -167,13 +165,13 @@
       gap: 0.6em;
       padding: 0.8em 1.2em;
       background: none;
-      color: $primary;
+      color: var(--primary);
       cursor: pointer;
       border: none;
       font-size: 1em;
       &:hover {
-        background: lighten($primary, 37%);
-        color: $secondary;
+        background: var(--primary-light);
+        color: var(--secondary);
       }
       .icon {
         color: inherit;
@@ -185,8 +183,8 @@
 @media (max-width: 1024px) {
   .custom-navbar {
     .navbar-menu {
-      background: $background;
-      box-shadow: 0 8px 24px rgba($primary,0.06);
+      background: var(--background);
+      box-shadow: 0 8px 24px rgba(66, 103, 178,0.06);
     }
     .navbar-item {
       border-radius: 0;

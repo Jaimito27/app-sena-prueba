@@ -1,75 +1,75 @@
 @use '../../../styles.scss' as *;
 
 .custom-register-card {
-  background: $card-bg;
+  background: var(--card-bg);
   border-radius: 18px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.22), 0 2px 8px rgba($primary, 0.08);
-  border: 1.5px solid lighten($card-bg, 7%);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.22), 0 2px 8px rgba(66,103,178, 0.08);
+  border: 1.5px solid var(--input-focus);
   overflow: hidden;
 }
 
 .custom-register-title {
-  color: $primary;
+  color: var(--primary);
   font-weight: 800;
   margin-bottom: 2rem;
   letter-spacing: 1px;
-  text-shadow: 0 2px 8px rgba($primary, .08);
+  text-shadow: 0 2px 8px rgba(66,103,178, .08);
 }
 
 .custom-register-label {
-  color: $text-muted;
+  color: var(--text-muted);
   font-weight: 700;
   letter-spacing: 0.5px;
 }
 
 .custom-register-input {
   border-radius: 7px;
-  border: 1.5px solid lighten($primary, 12%);
-  background: lighten($card-bg, 4%);
+  border: 1.5px solid var(--primary-light);
+  background: var(--input-bg);
   font-weight: 500;
-  color: $text-main;
+  color: var(--text-main);
   &::placeholder {
-    color: $text-muted;
+    color: var(--text-muted);
     font-weight: 400;
     opacity: 0.8;
   }
   &:focus {
-    border-color: $secondary;
-    box-shadow: 0 0 0 2px rgba($secondary,0.18);
-    background: lighten($card-bg, 10%);
-    color: $text-main;
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 2px var(--secondary-light);
+    background: var(--input-focus);
+    color: var(--text-main);
   }
 }
 
 .custom-register-btn {
-  background: $primary;
-  color: #fff;
+  background: var(--button-primary);
+  color: var(--button-primary-text);
   border: none;
   font-weight: 800;
   border-radius: 7px;
   letter-spacing: 0.5px;
-  box-shadow: 0 2px 8px rgba($primary,0.12);
+  box-shadow: 0 2px 8px var(--button-primary-hover);
   transition: background 0.2s, color 0.2s, box-shadow 0.2s;
   &:hover, &:focus {
-    background: $secondary;
-    color: $background;
-    box-shadow: 0 4px 24px rgba($secondary,0.13);
+    background: var(--button-primary-hover);
+    color: var(--primary);
+    box-shadow: 0 4px 24px var(--secondary-light);
   }
   &:disabled {
-    background: lighten($primary, 14%);
-    color: $text-muted;
+    background: var(--primary-light);
+    color: var(--text-muted);
     opacity: 0.85;
     cursor: not-allowed;
   }
 }
 
 .custom-link {
-  color: $secondary;
+  color: var(--secondary);
   font-weight: 600;
   text-decoration: underline dotted;
   transition: color 0.2s;
   &:hover {
-    color: lighten($secondary, 10%);
+    color: var(--secondary-light);
     text-decoration: underline;
   }
 }
@@ -78,7 +78,7 @@
   border-radius: 7px;
   font-weight: 600;
   letter-spacing: 0.5px;
-  background: $tertiary;
+  background: var(--tertiary);
   color: #fff;
   border: none;
 }
@@ -87,7 +87,7 @@
   border-radius: 7px;
   font-weight: 600;
   letter-spacing: 0.5px;
-  background: $primary;
+  background: var(--primary);
   color: #fff;
   border: none;
 }
