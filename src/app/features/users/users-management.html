@@ -36,6 +36,7 @@
     <thead>
       <tr>
         <th>ID</th>
+        <th>Imagen</th>
         <th>Username</th>
         <th>Email</th>
         <th>Nombre Completo</th>
@@ -47,6 +48,7 @@
     <tbody>
       <tr *ngFor="let user of filteredUsers">
         <td>{{ user.id }}</td>
+        <td><img src="{{ user.image }}" alt=""></td>
         <td>{{ user.username }}</td>
         <td>{{ user.email }}</td>
         <td>{{ user.firstName }} {{ user.lastName }}</td>
@@ -81,6 +83,7 @@
       <section class="modal-card-body">
         <div *ngIf="selectedUser$ | async as user">
           <p><strong>ID:</strong> {{ user.id }}</p>
+          <p><strong>Imagen:</strong></p><img src="{{user.image}}" alt="">
           <p><strong>Username:</strong> {{ user.username }}</p>
           <p><strong>Email:</strong> {{ user.email }}</p>
           <p><strong>Nombre:</strong> {{ user.firstName }} {{ user.lastName }}</p>
