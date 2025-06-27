@@ -27,9 +27,13 @@ export class Register {
 
   constructor() {
     this.registerForm = this.fb.group({
-      username: ['', Validators.required], //campo de userame de la API
+      username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      gender: ['male', Validators.required], // puedes poner 'male' o 'female' por defecto
+      image: ['https://robohash.org/temp.png?set=set4', Validators.required]
     });
 
     //limpiar mensaje de error/exito al cmabiar de formulario
@@ -42,22 +46,15 @@ export class Register {
   onSubmit(): void {
     if (this.registerForm.valid) {
       this.store.dispatch(new RegisterAction({ isLoading: true, error: null }));
-      const { username, email, password } = this.registerForm.value;
 
-      const userDetails = {
-        firstName: username.split('.')[0] || username, // Simular un nombre
-        lastName: username.split('.')[1] || 'Doe',    // Simular un apellido
-        username: username, // Esto es clave para la búsqueda posterior en login
-        email: email,       // Esto es para mostrar coherencia, DummyJSON no lo usa para login
-        password: password, // DummyJSON no procesa contraseñas en /add
-        gender: 'male', // Por defecto, se puede hacer un selector en la UI
-        image: 'https://robohash.org/temp.png?set=set4'
-      };
+
+      const userDetails = this.registerForm.value
 
       this.authService.register(userDetails).subscribe({
         next: (res) => {
           this.successMessage = 'Registro exitoso. ¡Puedes inciar sesión!';
           console.log('Registro exitoso', res);
+          this.store.dispatch(new RegisterAction({isLoading: false, error: null}))
           this.router.navigate(['/auth/login'])
         }, error: (err) => {
           this.successMessage = null;

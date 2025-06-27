@@ -82,25 +82,16 @@ export class AuthService {
 
   //registro (simulado)
   register(userDetails: any): Observable<any> {
-    //con el endpoint /user/add se simula el registro
-    return this.http.post<User>(`${this.API_URL}/add`, userDetails).pipe(
-      tap(newUser => {
-        console.log('Simulación de registro exitosa: ', newUser);
-        const simulatedUser: User = {
-          ...newUser,
-          roles: ['user'], //por defecto, nuevos usuario son 'user'
-          tenantId: (Math.floor(Math.random() * 2) + 1).toString(), //asignar un tenant id aleatorio
-        };
-        const simulatedToken = `fake-jwt-token-new-<span class="math-inline">\{newUser\.id\}\-</span>{Date.now()}`;
-        //el token exoira en 30 minutos
-        const expiresAt = Date.now() + 30 * 60 * 1000; //30 miunutos
-
-
-        this.store.dispatch(new SetUser(simulatedUser, simulatedToken, expiresAt));
+    // userDetails debe incluir al menos: firstName, lastName, username, password, email, etc.
+    return this.http.post<any>('https://dummyjson.com/users/add', userDetails).pipe(
+      // Puedes mapear la respuesta si necesitas agregar lógica extra o notificar al usuario
+      map(res => {
+        // res es el usuario recién creado, pero NO incluye token
+        // Aquí podrías retornar el usuario o solo un mensaje de éxito
+        return res;
       }),
       catchError(error => {
-        console.error('Simulación de registro fallida: ', error);
-        return throwError(() => new Error('Error al registrar usuario: ' + error.message));
+        return throwError(() => new Error(error.error?.message || 'Error al registrar'));
       })
     );
   }
@@ -111,14 +102,12 @@ export class AuthService {
   }
 
   //simulación renovación de token
-  renewToken(currentToken: string) {
-    const user = this.store.selectSnapshot(AuthState.currentUser);
-    if (!user) {
-      throw new Error('Usuario no autenticado');
-    }
-    return of({
-      token: `fake-jwt-token-${user.id}-${Date.now()}`,
-      expiresAt: Date.now() + 30 * 60 * 1000, // 30 mins más
-    })
+  renewToken(token: string): Observable<{ token: string, expiresAt: number }> {
+    return this.http.post<any>(`${this.API_URL}/auth/refresh`, { token }).pipe(
+      map(res => ({
+        token: res.token,
+        expiresAt: Date.now() + 30 * 60 * 1000,
+      }))
+    )
   }
 }

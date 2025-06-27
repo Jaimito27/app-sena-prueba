@@ -12,19 +12,21 @@ export class TokenRefreshService {
   private authService = inject(AuthService);
   private refreshInterval?: Subscription;
 
-  startAutoRefresh() {
+ startAutoRefresh() {
     this.stopAutoRefresh();
 
     this.refreshInterval = interval(60 * 1000).subscribe(() => {
       const expiresAt = this.store.selectSnapshot(AuthState.expiresAt);
-      const user = this.store.selectSnapshot(AuthState.currentUser)
-      const token = this.store.selectSnapshot(AuthState.token)
+      const user = this.store.selectSnapshot(AuthState.currentUser);
+      const token = this.store.selectSnapshot(AuthState.token);
       if (!expiresAt || !user || !token) return;
 
       const msToExpire = expiresAt - Date.now();
-      if (msToExpire < 5 * 60 * 1000 && msToExpire > 0) {//faltan menos de 5 mins
+
+      if (msToExpire < 5 * 60 * 1000 && msToExpire > 0) {
         this.authService.renewToken(token).subscribe({
           next: ({ token: newToken, expiresAt: newExpiresAt }) => {
+            // Mantén el usuario con roles/tenant, solo actualiza token y expiresAt
             this.store.dispatch(new SetUser(user, newToken, newExpiresAt));
           },
           error: () => {
@@ -35,9 +37,7 @@ export class TokenRefreshService {
       if (msToExpire <= 0) {
         this.store.dispatch(new Logout());
       }
-
     });
-
   }
 
   private stopAutoRefresh() {
