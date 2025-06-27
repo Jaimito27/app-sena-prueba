@@ -5,7 +5,7 @@ import { RoleGuard } from './core/guards/role.guard';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'auth/login',
     pathMatch: 'full'
   },
   {
@@ -14,6 +14,7 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./features/dashboard/dashboard.routes').then(m => m.DASHBOARD_ROUTES)
   },
   {

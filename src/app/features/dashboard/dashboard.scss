@@ -1,23 +1,19 @@
 @use '../../../styles.scss' as *;
 
 // -------------------------------------
-// Dashboard Profesional con tu paleta
+// Dashboard Minimalista y Simétrico
 // -------------------------------------
 
-$primary:   #4267b2;
-$secondary: #ff7f50;
-$tertiary:  #d72638;
-$background: #181927;
-$card-bg:   #23253a;
-$text-main: #e4eaf7;
-$text-muted: #b5b8c5;
 
-:host {
-  display: block;
+.dashboard-wrapper {
+  margin: 3rem 2.2rem 3rem 2.2rem;
   min-height: 100vh;
   background: $background;
   color: $text-main;
   font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  @media (max-width: 900px) {
+    margin: 1.2rem;
+  }
 }
 
 .dashboard-header {
@@ -25,53 +21,105 @@ $text-muted: #b5b8c5;
     color: $secondary !important;
     font-weight: 800;
     letter-spacing: 0.02em;
+    margin-bottom: 0.2em;
   }
   .subtitle {
     color: $text-muted !important;
     font-weight: 500;
-    margin-top: -0.5em;
+    margin-top: -0.3em;
+  }
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+// Métricas: tarjetas cuadradas y minimalistas, centradas
+.metrics-row {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2.8rem;
+}
+
+.metric-card {
+  width: 150px;
+  height: 170px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: $card-bg;
+  border-radius: 1.1rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+  border: 1.2px solid lighten($card-bg, 5%);
+  color: $text-main;
+  transition: box-shadow 0.18s;
+  padding: 0.7rem 0.3rem;
+  &:hover {
+    box-shadow: 0 10px 32px rgba($primary,0.11), 0 1px 4px rgba(0,0,0,0.12);
+  }
+  .dashboard-icon {
+    margin-bottom: 0.2rem;
+    width: 54px;
+    height: 54px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    &.has-background-primary { background: $primary !important; }
+    &.has-background-secondary { background: $secondary !important; }
+    &.has-background-tertiary { background: $tertiary !important; }
+    .icon {
+      font-size: 1.5rem !important;
+    }
+  }
+  .dashboard-metric {
+    font-size: 1.7rem;
+    font-weight: 800;
+    margin: 0.2rem 0 0.1rem 0;
+    color: $text-main;
+    letter-spacing: 0.03em;
+  }
+  .dashboard-label {
+    font-size: 1.05rem;
+    color: $text-muted;
+    font-weight: 600;
+    margin-top: 0.2rem;
+    letter-spacing: 0.03em;
+  }
+}
+
+// Fila inferior: dos tarjetas simétricas
+.bottom-row {
+  display: flex;
+  gap: 2rem;
+  @media (max-width: 900px) {
+    flex-direction: column;
+    gap: 1.2rem;
   }
 }
 
 .dashboard-card {
   background: $card-bg !important;
   border-radius: 1.3rem !important;
-  box-shadow: 0 6px 32px rgba(0,0,0,0.18) !important;
+  box-shadow: 0 6px 32px rgba(0,0,0,0.14) !important;
   border: 1.5px solid lighten($card-bg, 5%) !important;
   color: $text-main !important;
   min-height: 124px;
-  transition: box-shadow 0.25s;
+  transition: box-shadow 0.22s;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  @media (max-width: 900px) {
+    padding: 1.1rem;
+  }
   &:hover {
-    box-shadow: 0 10px 36px rgba($primary,0.12), 0 2px 8px rgba(0,0,0,0.13) !important;
+    box-shadow: 0 10px 36px rgba($primary,0.10), 0 2px 8px rgba(0,0,0,0.11) !important;
   }
 }
 
-.dashboard-icon {
-  width: 64px;
-  height: 64px;
-  border-radius: 16px;
-  display: flex; align-items: center; justify-content: center;
-  &.has-background-primary { background: $primary !important; }
-  &.has-background-secondary { background: $secondary !important; }
-  &.has-background-tertiary { background: $tertiary !important; }
-  .icon {
-    font-size: 1rem !important;
-  }
-}
-
-.dashboard-label {
-  color: $text-muted;
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-}
-
-.dashboard-metric {
-  color: $text-main;
-  font-size: 2.1rem;
-  font-weight: 800;
-  margin-top: 0.2rem;
-  letter-spacing: 0.03em;
+// Tarjetas inferiores simétricas
+.flex-fill {
+  flex: 1 1 0;
+  min-width: 0;
 }
 
 // Actividad
@@ -138,10 +186,4 @@ $text-muted: #b5b8c5;
     color: #ff7f50 !important;
     box-shadow: 0 2px 16px 0 rgba(48,96,208,0.16);
   }
-}
-
-@media (max-width: 900px) {
-  .dashboard-header .title { font-size: 1.5rem; }
-  .dashboard-metric { font-size: 1.25rem; }
-  .dashboard-card { padding: 0.7rem !important; }
 }

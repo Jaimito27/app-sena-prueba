@@ -1,95 +1,63 @@
-<div class="container py-5">
-  <div class="dashboard-header mb-5">
-    <h1 class="title is-2 mb-1">Dashboard General</h1>
-    <p class="subtitle is-5 has-text-grey-light">Bienvenido, revisa el estado general de la plataforma.</p>
+<div class="dashboard-wrapper">
+  <div class="dashboard-header has-text-centered" style="margin-bottom: 2.5rem;">
+    <h1 class="title" style="margin-bottom: 0.4em;">Bienvenido, <span style="color: #ff7f50;">{{ userName$ | async }}</span></h1>
+    <p class="subtitle" style="margin-top: 0.1em;">Panel de control de tu tenant</p>
   </div>
-  <div class="columns is-multiline mb-4">
-    <div class="column is-one-third">
-      <div class="card dashboard-card">
-        <div class="card-content">
-          <div class="is-flex is-align-items-center">
-            <div class="dashboard-icon has-background-primary mr-4">
-              <span class="icon is-large has-text-white">
-                <i class="fas fa-users fa-2x"></i>
-              </span>
-            </div>
-            <div>
-              <p class="dashboard-label">Usuarios Activos</p>
-              <h2 class="dashboard-metric">1,244</h2>
-            </div>
-          </div>
-        </div>
+
+  <!-- Métricas: fila centrada y simétrica -->
+  <div class="metrics-row" style="display: flex; justify-content: center; gap: 2rem; margin-bottom: 2.8rem;">
+    <div class="dashboard-card metric-card">
+      <div class="dashboard-icon has-background-primary mb-2">
+        <span class="icon is-large has-text-white"><i class="fas fa-users fa-lg"></i></span>
       </div>
+      <div class="dashboard-metric">{{ usersCount$ | async }}</div>
+      <div class="dashboard-label">Usuarios</div>
     </div>
-    <div class="column is-one-third">
-      <div class="card dashboard-card">
-        <div class="card-content">
-          <div class="is-flex is-align-items-center">
-            <div class="dashboard-icon has-background-secondary mr-4">
-              <span class="icon is-large has-text-black">
-                <i class="fas fa-file-alt fa-2x"></i>
-              </span>
-            </div>
-            <div>
-              <p class="dashboard-label">Documentos</p>
-              <h2 class="dashboard-metric">352</h2>
-            </div>
-          </div>
-        </div>
+    <div class="dashboard-card metric-card">
+      <div class="dashboard-icon has-background-secondary mb-2">
+        <span class="icon is-large has-text-black"><i class="fas fa-file-alt fa-lg"></i></span>
       </div>
+      <div class="dashboard-metric">{{ documentsCount$ | async }}</div>
+      <div class="dashboard-label">Documentos</div>
     </div>
-    <div class="column is-one-third">
-      <div class="card dashboard-card">
-        <div class="card-content">
-          <div class="is-flex is-align-items-center">
-            <div class="dashboard-icon has-background-tertiary mr-4">
-              <span class="icon is-large has-text-white">
-                <i class="fas fa-exclamation-triangle fa-2x"></i>
-              </span>
-            </div>
-            <div>
-              <p class="dashboard-label">Alertas</p>
-              <h2 class="dashboard-metric">3</h2>
-            </div>
-          </div>
-        </div>
+    <div class="dashboard-card metric-card">
+      <div class="dashboard-icon has-background-tertiary mb-2">
+        <span class="icon is-large has-text-white"><i class="fas fa-user-shield fa-lg"></i></span>
       </div>
+      <div class="dashboard-metric" style="text-transform: capitalize;">{{ userRole$ | async }}</div>
+      <div class="dashboard-label">Rol</div>
     </div>
   </div>
-  <div class="columns mt-4">
-    <div class="column is-two-thirds">
-      <div class="card dashboard-card">
-        <div class="card-content">
-          <h3 class="title is-5 mb-3">Actividad Reciente</h3>
-          <ul class="dashboard-activity">
-            <li>
-              <span class="dashboard-activity-dot has-background-primary"></span>
-              Nuevo usuario registrado: <strong>maria.gomez</strong> <span class="dashboard-activity-time">hace 5 min</span>
-            </li>
-            <li>
-              <span class="dashboard-activity-dot has-background-secondary"></span>
-              Documento <strong>Contrato2025.pdf</strong> subido <span class="dashboard-activity-time">hace 30 min</span>
-            </li>
-            <li>
-              <span class="dashboard-activity-dot has-background-tertiary"></span>
-              <strong>Alerta</strong>: Acceso no autorizado bloqueado <span class="dashboard-activity-time">hace 1 hora</span>
-            </li>
-          </ul>
-        </div>
-      </div>
+
+  <!-- Fila inferior: dos tarjetas simétricas -->
+  <div class="bottom-row" style="display: flex; gap: 2rem;">
+    <div class="dashboard-card flex-fill" style="flex:1 1 0; min-width: 0;">
+      <h3 class="title is-6 mb-3" style="color: #ff7f50;">Documentos recientes</h3>
+      <ul class="dashboard-activity" style="margin-top:1.3rem;">
+        <li *ngFor="let doc of (userDocuments$ | async)">
+          <span class="dashboard-activity-dot has-background-secondary"></span>
+          <strong>{{ doc.name }}</strong>
+          <span class="dashboard-activity-time">({{ doc.uploadDate }})</span>
+        </li>
+        <li *ngIf="(userDocuments$ | async)?.length === 0">
+          <span style="color:#b5b8c5;">Aún no subiste ningún documento.</span>
+        </li>
+      </ul>
     </div>
-    <div class="column">
-      <div class="card dashboard-card">
-        <div class="card-content">
-          <h3 class="title is-5 mb-3">Estado del Sistema</h3>
-          <div class="mb-2">
-            <span class="tag is-success is-light dashboard-status-tag">API: OK</span>
-            <span class="tag is-success is-light dashboard-status-tag">DB: OK</span>
-            <span class="tag is-warning is-light dashboard-status-tag">Email: Retrasos</span>
-          </div>
-          <div class="mt-4">
-            <button class="button is-primary is-fullwidth is-rounded">Ver Reporte Completo</button>
-          </div>
+    <div class="dashboard-card flex-fill" style="flex:1 1 0; min-width: 0;">
+      <h3 class="title is-6 mb-3" style="color: #ff7f50;">Estado del sistema</h3>
+      <div style="margin-bottom:1.1rem;">
+        <span class="tag is-success is-light dashboard-status-tag">API: OK</span>
+        <span class="tag is-success is-light dashboard-status-tag">DB: OK</span>
+        <span class="tag is-warning is-light dashboard-status-tag">Email: Retrasos</span>
+      </div>
+      <div style="margin-top:2rem; font-size: 1em;">
+        <div style="margin-bottom:0.6rem;">
+          <span style="font-weight: 700;">Usuario: </span> <span style="color:#e4eaf7;">{{ userName$ | async }}</span>
+        </div>
+        <div>
+          <span style="font-weight: 700;">Tenant: </span>
+          <span style="color: #b5b8c5;">{{ tenantId$ | async }}</span>
         </div>
       </div>
     </div>
