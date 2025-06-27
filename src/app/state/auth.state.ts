@@ -65,6 +65,8 @@ export class AuthState {
 
   @Selector()
   static isAuthenticated(state: AuthStateModel): boolean {
+
+    const token = state.token || (state.user && (state.user as any).accessToken);
     if (!state.token || !state.user) return false;
     if (!state.expiresAt) return false;
     return state.expiresAt > Date.now()

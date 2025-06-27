@@ -27,7 +27,7 @@ export class Login implements OnInit {
 
   constructor() {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      username: ['', [Validators.required]],
       password: ['', [Validators.required]],
     });
 
@@ -41,11 +41,12 @@ export class Login implements OnInit {
 
   onSubmit(): void {
     if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
-      this.authService.login(email, password).subscribe({
+      const { username, password } = this.loginForm.value;
+      this.authService.login(username, password).subscribe({
         next: (response) => {
           //el dispatch de setUser ya se hace en el auth service
           alert(`${response} Login exitoso (simulado)`,);
+          this.router.navigate(['/dashboard'])
         }, error: (err) => {
           console.error('Error en el login componente: ', err)
         }

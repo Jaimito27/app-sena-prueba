@@ -8,15 +8,15 @@
         <p class="title is-4 has-text-centered custom-login-title">Iniciar Sesión</p>
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
           <div class="field">
-            <label class="label custom-login-label">Correo Electrónico</label>
+            <label class="label custom-login-label">Usuario</label>
             <div class="control has-icons-left">
-              <input class="input custom-login-input" type="email" formControlName="email" placeholder="tu@ejemplo.com">
+              <input class="input custom-login-input" type="text" formControlName="username" placeholder="Tu usuario">
               <span class="icon is-small is-left">
-                <i class="fas fa-envelope"></i>
+                <i class="fas fa-user"></i>
               </span>
             </div>
-            <p class="help is-danger" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
-              Correo es requerido y debe ser válido.
+            <p class="help is-danger" *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+              Usuario es requerido.
             </p>
           </div>
 

@@ -12,43 +12,29 @@ import { Observable, of, throwError } from 'rxjs';
 export class AuthService {
   private http = inject(HttpClient);
   private store = inject(Store);
-  private API_URL = 'https://dummyjson.com/users'
+  private API_URL = 'https://dummyjson.com'
   constructor() { }
 
   //autenticación simulada
 
-  login(email: string, password: string): Observable<any> {
-    this.store.dispatch(new LoginAction(email, password));
-    // Opción 2: Obtener todos los usuarios y filtrar en el cliente por el campo 'email'
-
-    return this.http.get<{ users: User[] }>(this.API_URL).pipe(//trae todos los usuarios
-      map(res => {
-        //buscar e, usuario por email en el array que devuelve la API
-        const user = res.users.find(u => u.email === email);
-        if (user) {
-          const simulatedUser: User = {
-            ...user,
-            roles: user.id === 1 ? ['admin', 'user'] : ['user'], //user con id es admin
-            tenantId: user.id % 2 === 0 ? 'tenant1' : 'tenant2', //alternar tendadid para simular
-          };
-
-          const simulatedToken = `fake-jwt-token-${user.id}-${Date.now()}`;
-
-          //el token exoira en 30 minutos
-          const expiresAt = Date.now() + 30 * 60 * 1000; //30 miunutos
-          //despacha con expiresAt
-          this.store.dispatch(new SetUser(simulatedUser, simulatedToken, expiresAt));
-          return { token: simulatedToken, user: simulatedUser };
-        } else {
-          throw new Error('Credenciales inválidas: Usuario no encontrado.')
+  login(username: string, password: string): Observable<any> {
+    this.store.dispatch(new LoginAction(username, password));
+    return this.http.post<any>(`${this.API_URL}/auth/login`, { username, password }).pipe(
+      tap(res => {
+        const expiresAt = Date.now() + 30 * 60 * 1000;
+        const token = res.token || res.accessToken
+        const userWithRoles = {
+          ...res,
+          roles: res.id === 1 ? ['admin', 'user'] : ['user'], // ejemplo: el id 1 es admin
+          tenantId: res.id % 2 === 0 ? 'tenant1' : 'tenant2', // ejemplo de tenantId
         }
+        this.store.dispatch(new SetUser(userWithRoles, token, expiresAt));
       }),
       catchError(error => {
-        console.error('Error durante la llamada', error);
-        return throwError(() => new Error('Error el inciar sesión: ' + (error.message || 'Error')));
+        this.store.dispatch(new Logout());
+        return throwError(() => new Error(error.error?.message || 'Error en el login'));
       })
     )
-
   }
 
   forgotPassword(email: string): Observable<any> {
