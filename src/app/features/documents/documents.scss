@@ -3,7 +3,7 @@
 :host {
   display: block;
   min-height: 100vh;
-  background: transparent;
+  background: transparent; // Deja que el global se aplique
 }
 
 // Card principal
@@ -86,12 +86,40 @@
 .tag-contrast.user    { background: #fffbe7 !important; color: #c06d0a !important; }
 .tag-contrast.guest   { background: #f7eaff !important; color: #ad36c7 !important; }
 
-// Botones de acción en la tabla
-.buttons .button {
+// Botones de acción en la tabla (iconos siempre negros y hover solo fondo)
+.buttons .button,
+.table .button {
   border-radius: 6px !important;
   font-weight: 600 !important;
   box-shadow: 0 1px 6px 0 rgba(66, 103, 178, 0.08);
   transition: background 0.18s, color 0.18s;
+  .icon, i {
+    color: #232323 !important; // ícono negro SIEMPRE
+    transition: color 0.18s;
+  }
+  &.is-primary {
+    background: var(--button-primary) !important;
+    &:hover, &:focus {
+      background: var(--button-primary-hover) !important;
+    }
+  }
+  &.is-info {
+    background: #38b6ff !important;
+    &:hover, &:focus {
+      background: #2274d4 !important;
+    }
+  }
+  &.is-danger {
+    background: var(--button-danger) !important;
+    &:hover, &:focus {
+      background: var(--button-danger-hover) !important;
+    }
+  }
+  &.is-small {
+    padding: 0.18em 0.85em !important;
+    font-size: 0.96em !important;
+    border-radius: 7px !important;
+  }
 }
 
 // Notificaciones
@@ -135,4 +163,8 @@
     font-size: 1.4rem;
     margin-bottom: 1.2rem;
   }
+}
+
+img {
+  width: 40px;
 }

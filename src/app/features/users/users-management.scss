@@ -6,84 +6,34 @@
   background: transparent;
 }
 
+// Card principal
+.card {
+  background: var(--card-bg) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.18) !important;
+  border: 1.5px solid var(--input-focus) !important;
+}
+
 // Título
 .title {
   color: var(--secondary) !important;
-  font-weight: 700;
   letter-spacing: 0.5px;
-  margin-bottom: 2rem;
+  font-weight: 700;
 }
 
-// Filtros y campos
-.field {
-  margin-bottom: 1.2rem;
-}
-
-.label {
-  color: var(--secondary) !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.02em;
-  margin-bottom: 0.2rem;
-}
-
-.select select {
+// Inputs con icono
+.input.is-rounded {
   background: var(--input-bg) !important;
   color: var(--text-main) !important;
-  border-radius: 7px;
+  border-radius: 7px !important;
   border: 1.5px solid var(--primary) !important;
-  font-size: 1em !important;
+  &::placeholder { color: var(--text-muted) !important; }
   &:focus {
     border-color: var(--secondary) !important;
     box-shadow: 0 0 0 2px var(--secondary-light) !important;
     background: var(--input-focus) !important;
+    color: var(--text-main) !important;
   }
-}
-
-// Botones con colores personalizados y contraste claro
-.button.is-primary {
-  background: var(--button-primary) !important;
-  color: var(--button-primary-text) !important;
-  &:hover, &:focus {
-    background: var(--button-primary-hover) !important;
-    color: var(--primary) !important;
-  }
-}
-.button.is-success {
-  background: var(--button-success) !important;
-  color: var(--button-success-text) !important;
-  &:hover, &:focus {
-    background: var(--button-success-hover) !important;
-    color: var(--primary) !important;
-  }
-}
-.button.is-info {
-  background: #38b6ff !important;
-  color: var(--text-main) !important;
-  &:hover, &:focus {
-    background: #2274d4 !important;
-    color: var(--button-primary) !important;
-  }
-}
-.button.is-warning {
-  background: #ffe066 !important;
-  color: var(--text-main) !important;
-  &:hover, &:focus {
-    background: #ffd23f !important;
-    color: var(--tertiary) !important;
-  }
-}
-.button.is-danger {
-  background: var(--button-danger) !important;
-  color: var(--button-danger-text) !important;
-  &:hover, &:focus {
-    background: var(--button-danger-hover) !important;
-    color: var(--tertiary) !important;
-  }
-}
-.button.is-small {
-  padding: 0.18em 0.85em !important;
-  font-size: 0.96em !important;
-  border-radius: 7px !important;
 }
 
 // Tabla profesional
@@ -115,7 +65,8 @@
   .has-text-centered { text-align: center !important; }
 }
 
-// Tags para roles
+// Tags claros y legibles
+.tag-contrast,
 .tag.is-light {
   background: var(--card-bg) !important;
   color: var(--text-main) !important;
@@ -125,8 +76,50 @@
   text-transform: capitalize;
   box-shadow: 0 1px 6px 0 rgba(66, 103, 178, 0.05);
   opacity: 0.96;
+  transition: background 0.15s, color 0.15s;
   margin-bottom: 2px;
-  font-size: 0.96em;
+  font-size: 0.97em;
+}
+
+// Si quieres tags de colores según tipo, agrega clases adicionales en el HTML
+.tag-contrast.admin   { background: #eaf6ff !important; color: #2274d4 !important; }
+.tag-contrast.user    { background: #fffbe7 !important; color: #c06d0a !important; }
+.tag-contrast.guest   { background: #f7eaff !important; color: #ad36c7 !important; }
+
+// Botones de acción en la tabla (iconos siempre negros y hover solo fondo)
+.buttons .button,
+.table .button {
+  border-radius: 6px !important;
+  font-weight: 600 !important;
+  box-shadow: 0 1px 6px 0 rgba(66, 103, 178, 0.08);
+  transition: background 0.18s, color 0.18s;
+  .icon, i {
+    color: #232323 !important; // ícono negro SIEMPRE
+    transition: color 0.18s;
+  }
+  &.is-primary {
+    background: var(--button-primary) !important;
+    &:hover, &:focus {
+      background: var(--button-primary-hover) !important;
+    }
+  }
+  &.is-info {
+    background: #38b6ff !important;
+    &:hover, &:focus {
+      background: #2274d4 !important;
+    }
+  }
+  &.is-danger {
+    background: var(--button-danger) !important;
+    &:hover, &:focus {
+      background: var(--button-danger-hover) !important;
+    }
+  }
+  &.is-small {
+    padding: 0.18em 0.85em !important;
+    font-size: 0.96em !important;
+    border-radius: 7px !important;
+  }
 }
 
 // Notificaciones
@@ -142,7 +135,7 @@
   font-weight: 600;
 }
 
-// Modales
+// Modales adaptados
 .modal-card {
   background: var(--card-bg) !important;
   color: var(--text-main) !important;
@@ -158,10 +151,13 @@
   border: none;
 }
 
-// Responsive
+// Ajustes responsivos
 @media (max-width: 900px) {
   .table {
     font-size: 0.94em;
+  }
+  .card {
+    padding: 1rem !important;
   }
   .title {
     font-size: 1.4rem;

@@ -3,6 +3,23 @@
   border-bottom: 2.5px solid var(--primary);
   box-shadow: 0 3px 18px rgba(66, 103, 178, 0.14);
   min-height: 4.5rem;
+  display: flex;
+  align-items: center;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+
+  .navbar-brand,
+  .navbar-menu {
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+  .navbar-start, .navbar-end {
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
 
   .custom-navbar-title {
     display: flex;
@@ -28,24 +45,43 @@
     }
   }
 
-  // Menú izquierdo: solo aquí hover y activo
   > .navbar-menu > .navbar-start > .navbar-item {
-    color: var(--text-main);
-    font-weight: 600;
-    transition: background 0.2s, color 0.2s;
-    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.8em;
+    min-height: 2.8em;
+    padding: 0 1.3em;
+    margin-right: 0.4em;
+    font-size: 1.05em;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    background: transparent !important;
+    color: var(--primary) !important;
+    border: 1px solid var(--primary);
+    border-radius: 6px;
+    box-shadow: none;
+    text-decoration: none !important;
+    transition: background 0.16s, color 0.16s, border 0.16s;
+    line-height: 1.7;
 
-    &:hover {
-      background: var(--primary);
-      color: var(--secondary) !important;
+    &:last-child {
+      margin-right: 0;
+    }
+    &:hover,
+    &:focus-visible {
+      background: var(--primary-light) !important;
+      color: var(--primary) !important;
+      text-decoration: none !important;
+      border-color: var(--primary-light);
     }
     &.is-active {
-      background: var(--primary) !important;
+      background: var(--background) !important;
       color: var(--secondary) !important;
-      box-shadow: 0 2px 8px rgba(255, 127, 80, 0.14);
       border: 2px solid var(--secondary);
+      box-shadow: none;
       z-index: 2;
-      position: relative;
+      text-decoration: none !important;
     }
     .icon {
       color: var(--secondary);
@@ -53,69 +89,115 @@
     }
   }
 
-  // Quita hover y fondo a los elementos de la derecha
-  .navbar-end,
-  .custom-navbar-buttons-container,
-  .navbar-end .navbar-item {
+  // --- Botón de tema ---
+  .btn-color-theme {
+    border-radius: 6px !important;
+    padding: 0 1.1em !important;
+    min-width: 2.8em;
+    height: 2.8em;
+    font-size: 1.05em !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: transparent !important;
-    box-shadow: none !important;
+    color: var(--primary) !important;
+    border: 1px solid var(--primary);
+    box-shadow: none;
+    line-height: 1.7;
+    transition: background 0.16s, color 0.16s, box-shadow 0.16s;
+
+    .icon, i {
+      font-size: 1.12em;
+      transition: color 0.16s;
+    }
     &:hover,
     &:focus {
-      background: transparent !important;
-      color: inherit !important;
+      background: var(--secondary) !important;
+      color: #fff !important;
+      .icon, i {
+        color: #fff !important;
+      }
     }
   }
+  // Color especial para el icono fa-sun en modo oscuro
+  .btn-color-theme .fa-sun {
+    color: #fff !important; // Negro en modo claro
+    transition: color 0.18s;
+  }
 
-  // Botones de sesión (derecha)
-  .buttons .button {
-    border-radius: 7px;
-    font-weight: 700;
-    letter-spacing: 0.4px;
-    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-    position: relative;
-    border: none;
+    .btn-color-theme .fa-moon {
+    color: #232323 !important; // Negro en modo claro
+    transition: color 0.18s;
+  }
+}
 
-    // Estado activo (ruta actual)
-    &.is-active {
-      background: var(--background) !important;
-      color: var(--secondary) !important;
-      border: 2px solid var(--secondary);
-      box-shadow: 0 2px 8px rgba(255, 127, 80, 0.14);
-      z-index: 2;
-      &:hover,
-      &:focus {
-        background: var(--background) !important;
-        color: var(--secondary) !important;
-      }
-    }
-    // Hover solo si NO está activo
-    &:not(.is-active):hover,
-    &:not(.is-active):focus {
-      background: var(--secondary) !important;
-      color: var(--background) !important;
-    }
 
-    // Colores de los botones principales
-    &.is-primary,
-    &.custom-navbar-register {
-      background: var(--primary) !important;
-      color: #fff !important;
-      &:hover,
-      &:focus {
-        background: var(--primary-light) !important;
-        color: var(--primary) !important;
-      }
-    }
-    &.is-light,
-    &.custom-navbar-login {
-      background: #fff !important;
+// Si quieres que la luna siempre sea negra y solo el sol cambie:
+// .btn-color-theme .fa-moon {
+//   color: #232323 !important;
+// }
+
+.custom-navbar .buttons .button {
+  border-radius: 6px !important;
+  padding: 0 1.1em !important;
+  min-width: 2.8em;
+  height: 2.8em;
+  font-size: 1.05em !important;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  background: transparent !important;
+  color: var(--primary) !important;
+  border: 1px solid var(--primary);
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.7;
+  transition: background 0.16s, color 0.16s, border 0.16s;
+  .icon, i {
+    color: #232323 !important;
+    font-size: 1.12em;
+    transition: color 0.16s;
+  }
+  &.is-active {
+    background: var(--background) !important;
+    color: var(--secondary) !important;
+    border: 2px solid var(--secondary);
+    box-shadow: none;
+    z-index: 2;
+    text-decoration: none !important;
+  }
+  &:not(.is-active):hover,
+  &:not(.is-active):focus {
+    background: var(--primary-light) !important;
+    color: var(--primary) !important;
+    box-shadow: none;
+  }
+  &.is-primary,
+  &.custom-navbar-register {
+    background: var(--primary) !important;
+    color: #fff !important;
+    border: 2px solid var(--primary);
+    &:hover,
+    &:focus {
+      background: var(--primary-light) !important;
       color: var(--primary) !important;
-      &:hover,
-      &:focus {
-        background: var(--primary-light) !important;
-        color: var(--primary) !important;
-      }
     }
+  }
+  &.is-light,
+  &.custom-navbar-login {
+    background: #fff !important;
+    color: var(--primary) !important;
+    border: 2px solid var(--primary);
+    &:hover,
+    &:focus {
+      background: var(--primary-light) !important;
+      color: var(--primary) !important;
+    }
+  }
+  margin-right: 0.4em;
+  &:last-child {
+    margin-right: 0;
   }
 }
 
@@ -126,11 +208,35 @@
   .user-dropdown-trigger {
     display: flex;
     align-items: center;
-    gap: 0.3em;
+    gap: 0.4em;
     background: var(--primary-light);
     color: var(--primary);
-    border-radius: 7px;
+    border-radius: 6px;
     border: none;
+    padding: 0 1.1em;
+    height: 2.8em;
+    min-width: 2.8em;
+    font-size: 1.05em;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: none !important;
+    transition: background 0.14s, color 0.14s, box-shadow 0.14s;
+    line-height: 1.7;
+    &:focus,
+    &:active {
+      background: var(--primary-light) !important;
+      color: var(--primary) !important;
+      box-shadow: none !important;
+      border: none !important;
+      outline: none !important;
+      text-decoration: none !important;
+    }
+    &:hover {
+      background: var(--primary-light) !important;
+      color: var(--primary) !important;
+      box-shadow: none !important;
+      text-decoration: none !important;
+    }
     .user-avatar {
       width: 32px;
       height: 32px;
@@ -146,6 +252,8 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      text-decoration: none !important;
+      background: none !important;
     }
   }
   .user-dropdown-menu {
@@ -188,6 +296,7 @@
     }
     .navbar-item {
       border-radius: 0;
+      text-decoration: none !important;
     }
   }
 }

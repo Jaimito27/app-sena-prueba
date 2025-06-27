@@ -59,11 +59,11 @@
             </td>
             <td>{{ user.tenantId }}</td>
             <td>
-              <button class="button is-small is-info mr-2" (click)="viewDetails(user)">Ver Detalles</button>
+              <button class="button is-small is-info mr-2" (click)="viewDetails(user)"><span class="icon"><i class="fas fa-eye"></i></span></button>
               <button class="button is-small is-warning mr-2" (click)="onEditUser(user)"
-                *ngIf="isAdmin || user.tenantId === currentTenantId">Editar</button>
+                *ngIf="isAdmin || user.tenantId === currentTenantId"><span class="icon"><i class="fas fa-edit"></i></span></button>
               <button class="button is-small is-danger" (click)="onDeleteUser(user.id)"
-                *ngIf="isAdmin || user.tenantId === currentTenantId">Eliminar</button>
+                *ngIf="isAdmin || user.tenantId === currentTenantId"><span class="icon"><i class="fas fa-trash"></i></span></button>
             </td>
           </tr>
           <tr *ngIf="filteredUsers.length === 0 && !(isLoading$ | async)">

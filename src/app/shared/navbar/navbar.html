@@ -9,12 +9,8 @@
       </span>
     </a>
     <!-- Hamburger for mobile -->
-    <a role="button"
-       class="navbar-burger"
-       [ngClass]="{'is-active': navbarOpen}"
-       aria-label="menu"
-       aria-expanded="false"
-       (click)="toggleNavbar()">
+    <a role="button" class="navbar-burger" [ngClass]="{'is-active': navbarOpen}" aria-label="menu" aria-expanded="false"
+      (click)="toggleNavbar()">
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
@@ -24,28 +20,22 @@
   <div id="navbarBasicExample" class="navbar-menu" [ngClass]="{'is-active': navbarOpen}">
     <div class="navbar-start">
       <ng-container *ngIf="(isAdmin$ | async) || (isUser$ | async)">
-        <a class="navbar-item"
-           routerLink="/dashboard"
-           routerLinkActive="is-active"
-           [routerLinkActiveOptions]="{ exact: true }">
+        <a class="navbar-item" routerLink="/dashboard" routerLinkActive="is-active"
+          [routerLinkActiveOptions]="{ exact: true }">
           <span class="icon"><i class="fas fa-home"></i></span>
           <span>Dashboard</span>
         </a>
       </ng-container>
       <ng-container *ngIf="(isAdmin$ | async) || (isUser$ | async)">
-        <a class="navbar-item"
-           routerLink="/documents"
-           routerLinkActive="is-active"
-           [routerLinkActiveOptions]="{ exact: true }">
+        <a class="navbar-item" routerLink="/documents" routerLinkActive="is-active"
+          [routerLinkActiveOptions]="{ exact: true }">
           <span class="icon"><i class="fas fa-file-alt"></i></span>
           <span>Documentos</span>
         </a>
       </ng-container>
       <ng-container *ngIf="(isAdmin$ | async)">
-        <a class="navbar-item"
-           routerLink="/users"
-           routerLinkActive="is-active"
-           [routerLinkActiveOptions]="{ exact: true }">
+        <a class="navbar-item" routerLink="/users" routerLinkActive="is-active"
+          [routerLinkActiveOptions]="{ exact: true }">
           <span class="icon"><i class="fas fa-users-cog"></i></span>
           <span>Usuarios</span>
         </a>
@@ -53,18 +43,19 @@
     </div>
 
     <div class="navbar-end">
+      <button class="btn-color-theme" (click)="toggleTheme()">
+        <i *ngIf="!isDarkTheme" class="fas fa-moon"></i>
+        <i *ngIf="isDarkTheme" class="fas fa-sun"></i>
+      </button>
       <div class="navbar-item custom-navbar-buttons-container">
         <div class="buttons" *ngIf="(isAuthenticated$ | async)">
           <ng-container *ngIf="currentUser$ | async as user">
-            <div class="user-dropdown"
-                 [class.is-active]="userMenuOpen"
-                 (mouseenter)="userMenuOpen = true"
-                 (mouseleave)="userMenuOpen = false">
-              <button class="button is-light user-dropdown-trigger"
-                      (click)="userMenuOpen = !userMenuOpen"
-                      type="button">
+            <div class="user-dropdown" [class.is-active]="userMenuOpen" (mouseenter)="userMenuOpen = true"
+              (mouseleave)="userMenuOpen = false">
+              <button class="button is-light user-dropdown-trigger" (click)="userMenuOpen = !userMenuOpen"
+                type="button">
                 <img [src]="user.image || 'https://ui-avatars.com/api/?name=' + user.firstName + user.lastName"
-                    class="user-avatar" alt="avatar" />
+                  class="user-avatar" alt="avatar" />
                 <span class="user-name">{{ user.firstName }} {{ user.lastName }}</span>
                 <span class="icon is-small"><i class="fas fa-caret-down"></i></span>
               </button>
@@ -78,21 +69,15 @@
           </ng-container>
         </div>
 
-        <button class="button" (click)="toggleTheme()">
-  Cambiar tema
-</button>
+
         <ng-container *ngIf="!(isAuthenticated$ | async)">
-          <a class="button is-primary custom-navbar-register"
-             routerLink="/auth/register"
-             routerLinkActive="is-active"
-             [routerLinkActiveOptions]="{ exact: true }">
+          <a class="button is-primary custom-navbar-register" routerLink="/auth/register" routerLinkActive="is-active"
+            [routerLinkActiveOptions]="{ exact: true }">
             <span class="icon"><i class="fas fa-user-plus"></i></span>
             <strong>Registrarse</strong>
           </a>
-          <a class="button is-light custom-navbar-login"
-             routerLink="/auth/login"
-             routerLinkActive="is-active"
-             [routerLinkActiveOptions]="{ exact: true }">
+          <a class="button is-light custom-navbar-login" routerLink="/auth/login" routerLinkActive="is-active"
+            [routerLinkActiveOptions]="{ exact: true }">
             <span class="icon"><i class="fas fa-sign-in-alt"></i></span>
             <span>Iniciar Sesión</span>
           </a>
@@ -101,3 +86,5 @@
     </div>
   </div>
 </nav>
+
+

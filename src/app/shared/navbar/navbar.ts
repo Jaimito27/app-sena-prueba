@@ -20,7 +20,7 @@ export class Navbar implements OnInit {
   //selectores para obtener el estado de autenticación y el rol de admin
 
   navbarOpen = false;
-
+  isDarkTheme = false;
   userMenuOpen = false;
   toggleUserMenu() {
     this.userMenuOpen = !this.userMenuOpen;
@@ -43,6 +43,7 @@ export class Navbar implements OnInit {
 
     const saved = localStorage.getItem('theme');
     document.documentElement.setAttribute('data-theme', saved || 'light');
+    this.isDarkTheme = (saved || 'light') === 'dark';
   }
   constructor() { }
 
@@ -53,9 +54,11 @@ export class Navbar implements OnInit {
 
 
   toggleTheme() {
-    const theme = document.documentElement.getAttribute('data-theme');
-    document.documentElement.setAttribute('data-theme', theme === 'dark' ? 'light' : 'dark');
-    localStorage.setItem('theme', theme === 'dark' ? 'light' : 'dark');
+    const isCurrentlyDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const newTheme = isCurrentlyDark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    this.isDarkTheme = newTheme === 'dark';
   }
 
 
