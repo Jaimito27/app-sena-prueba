@@ -1,7 +1,10 @@
+<!-- Notificación fija arriba -->
+
+
+<div *ngIf="sessionExpiredMsg" class="notification is-warning custom-login-warning session-expired-msg">
+  {{ sessionExpiredMsg }}
+</div>
 <div class="columns is-centered mt-6">
-  <div *ngIf="sessionExpiredMsg" class="notification is-warning custom-login-warning mb-4">
-    {{ sessionExpiredMsg }}
-  </div>
   <div class="column is-one-third">
     <div class="card custom-login-card">
       <div class="card-content">

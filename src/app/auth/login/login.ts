@@ -45,7 +45,7 @@ export class Login implements OnInit {
       this.authService.login(username, password).subscribe({
         next: (response) => {
           //el dispatch de setUser ya se hace en el auth service
-          alert(`${response} Login exitoso (simulado)`,);
+          
           this.router.navigate(['/dashboard'])
         }, error: (err) => {
           console.error('Error en el login componente: ', err)
