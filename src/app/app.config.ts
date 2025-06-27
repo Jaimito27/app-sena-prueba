@@ -11,6 +11,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { UserState } from './state/user.state';
 import { DocumentsState } from './state/document.state';
+import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -28,6 +29,6 @@ export const appConfig: ApplicationConfig = {
         keys: ['auth'],
       }),
     ),
-    provideHttpClient(withInterceptors([AuthInterceptor])),
+    provideHttpClient(withInterceptors([AuthInterceptor])), provideClientHydration(withEventReplay()),
   ]
 };

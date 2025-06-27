@@ -1,7 +1,8 @@
 import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { AuthStateModel } from '../shared/models/auth-state.interface';
-import { Injectable } from "@angular/core";
+import { Inject, Injectable, PLATFORM_ID } from "@angular/core";
 import { User } from "../shared/models/user.interface";
+import { isPlatformBrowser } from "@angular/common";
 
 
 //estado por defecto
@@ -51,6 +52,7 @@ export class ForgotPassword {
 @Injectable()
 export class AuthState {
 
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
   //con los selectores para acceder con facilidad a partes del estado
 
   @Selector()
@@ -134,9 +136,14 @@ export class AuthState {
   @Action(Logout)
   logout(ctx: StateContext<AuthStateModel>) {
     ctx.setState(initialState); //resetea el estado a su valor inicial
-    //limipiar el almacenamiento persistente
-    localStorage.removeItem('auth.token');
-    localStorage.removeItem('auth.user')
+
+
+    if (isPlatformBrowser(this.platformId)) {
+      //limipiar el almacenamiento persistente
+      localStorage.removeItem('auth.token');
+      localStorage.removeItem('auth.user')
+    }
+
   }
 
   @Action(ClearAuthError)

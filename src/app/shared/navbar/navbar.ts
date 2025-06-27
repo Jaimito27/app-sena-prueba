@@ -1,10 +1,11 @@
-import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { Select, Store } from '@ngxs/store';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, Inject, inject, OnInit, PLATFORM_ID } from '@angular/core';
+
+import { Store } from '@ngxs/store';
 import { AuthState, Logout } from '../../state/auth.state';
 import { Observable } from 'rxjs';
 import { User } from '../models/user.interface';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -41,11 +42,15 @@ export class Navbar implements OnInit {
     this.isUser$ = this.store.select(AuthState.isUser);
     this.currentUser$ = this.store.select(AuthState.currentUser);
 
-    const saved = localStorage.getItem('theme');
-    document.documentElement.setAttribute('data-theme', saved || 'light');
-    this.isDarkTheme = (saved || 'light') === 'dark';
+    if (isPlatformBrowser(this.platformId)) {
+      const saved = localStorage.getItem('theme');
+      document.documentElement.setAttribute('data-theme', saved || 'light');
+      this.isDarkTheme = (saved || 'light') === 'dark';
+    }
+
+
   }
-  constructor() { }
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
 
   onLogout(): void {
     this.store.dispatch(new Logout());
@@ -54,11 +59,13 @@ export class Navbar implements OnInit {
 
 
   toggleTheme() {
-    const isCurrentlyDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    const newTheme = isCurrentlyDark ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-    this.isDarkTheme = newTheme === 'dark';
+      if (isPlatformBrowser(this.platformId)) {
+      const isCurrentlyDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      const newTheme = isCurrentlyDark ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      this.isDarkTheme = newTheme === 'dark';
+    }
   }
 
 
